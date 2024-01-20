@@ -8,6 +8,7 @@
     "build": "npx tsc",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
     "lint": "eslint . --ext .ts",
+    "plugandplay": "npx tsc && node dist/index.js",
     "start": "node dist/index.js",
     "test": "echo \"ℹ No test script specified. Pass\""
   },

@@ -1,0 +1,37 @@
+version: '3.1'
+
+volumes:
+  database-data:
+    driver: local
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - 27017:27017
+    volumes:
+      - ./volumes/database-data:/data/db 
+
+  mongo-express:
+    image: mongo-express
+    restart: unless-stopped
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_URL: mongodb://root:password@mongodb:27017/
+
+  backend-server:
+    build: .
+    image: backend_image
+    container_name: sde-backend_server
+    ports: 
+      - 3000:3000
+      - 3001:3001
+
