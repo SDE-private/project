@@ -6,27 +6,27 @@ export default router;
 
 //respond to GET requests on /db-tests
 router.get('/conn', async (req, res) => {
-    console.log("avviando la connessione")
 
     const connected = await connectToDatabase();
     if (connected) {
-        res.send("connessione avvenuta");
+        res.send("Connessione avvenuta");
     } else {
-        res.send("connessione fallita");
+        res.send("Connessione fallita");
     }
 });
 
 router.post('/add_user', async (req, res) => {
-    console.log("aggiungo un utente")
+    console.log("Adding user...")
     const uname : string = req.body.username;
     const mail : string = req.body.email;
 
+    //doesn't matter if already connected.. it will check if it is connected before startign the whole procedure
     await connectToDatabase();
 
     const created : boolean = await createUser({username: uname, email: mail});
     if (created) {
-        res.send("utente aggiunto");
+        res.send("New user ("+uname+") successfully added");
     } else {
-        res.send("utente non aggiunto");
+        res.send("Cannot add user ("+uname+")");
     }
 });
