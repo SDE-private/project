@@ -1,5 +1,5 @@
 import { Router } from "express";
-import moroofyController from "../adapters/moorofy.js";
+import moroofyController from "../adapters/moroofy.js";
 
 const router = Router();
 
