@@ -12,6 +12,6 @@ app.use(cors());
 
 app.use("/", router);
 app.use("/db-tests", routerDB)
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(config.swagger_specs));
+app.use("/api-docs", swaggerUi.serveFiles(config.swagger_specs), swaggerUi.setup(config.swagger_specs));
 
 export default app;

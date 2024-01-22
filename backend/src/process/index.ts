@@ -10,6 +10,6 @@ app.use(express.json());
 app.use(cors());
 app.use("/", router);
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(config.swagger_specs));
+app.use("/api-docs", swaggerUi.serveFiles(config.swagger_specs), swaggerUi.setup(config.swagger_specs));
 
 export default app;
