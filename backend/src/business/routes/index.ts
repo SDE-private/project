@@ -69,6 +69,6 @@ const router = Router();
  *
  *
  */
-router.post("/moorofy", moroofyController);
+router.post("/maroofy", moroofyController);
 
 export default router;

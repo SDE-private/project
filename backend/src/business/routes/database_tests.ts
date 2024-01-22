@@ -11,7 +11,7 @@ router.get('/conn', async (req, res) => {
     if (connected) {
         res.send("Connessione avvenuta");
     } else {
-        res.send("Connessione fallita");
+        res.status(500).send("Connessione fallita");
     }
 });
 
@@ -27,6 +27,6 @@ router.post('/add_user', async (req, res) => {
     if (created) {
         res.send("New user ("+uname+") successfully added");
     } else {
-        res.send("Cannot add user ("+uname+")");
+        res.status(400).send("Cannot add user ("+uname+")");
     }
 });

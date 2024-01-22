@@ -78,6 +78,8 @@ export async function connectToDatabase() {
     }
 }
 
+//-----------
+
 export async function createUser(user: User) {
 
     if (!isConnected) {
@@ -104,6 +106,8 @@ export async function createUser(user: User) {
         return false;
     }
 }
+
+//-----------
 
 //----------------------exports----------------------------
 
