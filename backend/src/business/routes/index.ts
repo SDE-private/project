@@ -1,5 +1,6 @@
 import { Router } from "express";
 import moroofyController from "../adapters/moroofy.js";
+import ytDlController from "../adapters/yt_dl.js";
 
 const router = Router();
 
@@ -70,5 +71,7 @@ const router = Router();
  *
  */
 router.post("/maroofy", moroofyController);
+
+router.post("/yt-dl", ytDlController);
 
 export default router;
