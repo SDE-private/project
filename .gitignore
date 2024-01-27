@@ -1,8 +1,18 @@
 **/node_modules/
+//tentativi (non so nemmeno se questo sia il posto giusto dove metterli)
+try{
+    connectToDatabase();
+    console.log("connected");
+    createUser({username: "pippo", email: "pippone@gmail.com"});
+    console.log("user created");
+
+}catch(err){
+    console.log(err);
+}
 **/dist/
 
 # Other database files
-backend/volumes/
+backend/volumes/database-data/
 
 # Miscellaneous
 frontend/*.class
