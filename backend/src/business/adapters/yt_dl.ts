@@ -34,24 +34,24 @@ const ytDlController = async (
         res.status(200).send("Video downloaded successfully");
 
         //---------------------------------- THE FOLLOWING PART SHOULDN'T BE HERE ----------------------------------
-        // if (ytdlOutput.title === undefined) {
-        //     console.log("yt-dl error: title is undefined");
-        //     return res.status(500).send("Internal error");
-        // }
+        if (ytdlOutput.title === undefined) {
+            console.log("yt-dl error: title is undefined");
+            return res.status(500).send("Internal error");
+        }
         // //convert the mp3 video into Binary Data
-        // const base_path: string = "/app"
-        // const audio_path: string = base_path + "/" + ytdlOutput.title + ".mp3";
-        // const audio_data: Buffer = fs.readFileSync(audio_path);
-        // //transform the video into a song
-        // const song: Song = {
-        //     title: ytdlOutput.title,
-        //     upload_timestamp: Date.now(),
-        //     song: audio_data
-        // }
+        const base_path: string = "/app"
+        const audio_path: string = base_path + "/" + ytdlOutput.title + ".mp3";
+        const audio_data: Buffer = fs.readFileSync(audio_path);
+        //transform the video into a song
+        const song: Song = {
+            title: ytdlOutput.title,
+            upload_timestamp: Date.now(),
+            song: audio_data
+        }
 
-        // //add the song to the user's library
-        // const username = req.body.username;
-        // addSong(username, song);
+        //add the song to the user's library
+        const username = req.body.username;
+        addSong(username, song);
         //---------------------------------- THE PREVIOUS PART SHOULDN'T BE HERE ----------------------------------
 
         return res;
