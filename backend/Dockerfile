@@ -9,6 +9,7 @@ COPY package*.json ./
 
 # Installa le dipendenze
 RUN npm install
+RUN apt update && apt install ffmpeg -y
 
 # Copia i file dell'applicazione nell'immagine Docker
 COPY . .

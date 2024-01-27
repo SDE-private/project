@@ -2,7 +2,7 @@
 **/dist/
 
 # Other database files
-backend/volumes/*
+backend/volumes/
 
 # Miscellaneous
 frontend/*.class
