@@ -1,22 +1,36 @@
+import { timeStamp } from 'console';
 import mongoose from 'mongoose';
 
 //----------------------types----------------------------
+
+interface Song {
+    title: string;
+    upload_timestamp: number;
+    song: BinaryData;
+}
 
 //typescript interface to represent a MongoDB document type
 interface User {
     username: string;
     email: string;
-    //songs: string[];
+    songs: Song[];
 }
 
 
-//----------------------models----------------------------
+//----------------------schemas and models----------------------------
+
+//create a schema for the song. A schema is a blueprint for the document
+const songSchema = new mongoose.Schema<Song>({
+    title: {type: String, required: true},
+    upload_timestamp: {type: Number, required: true},
+    song: {type: Buffer, required: true}
+});
 
 //create a schema for the user. A schema is a blueprint for the document
 const userSchema = new mongoose.Schema<User>({
     username: {type: String, required: true},
     email: {type: String, required: true},
-    //songs: [String]
+    songs: [songSchema]
 });
 
 //create a model for the user. A model is a class with which we construct documents
@@ -109,6 +123,34 @@ export async function createUser(user: User) {
 
 //-----------
 
+export async function addSong(username: string, song: Song) {
+    
+        if (!isConnected) {
+            console.log("No connection to the db... impossible to add song");
+            return false;
+        }
+    
+        try {
+            //check if user already exists
+            const userExists = await userModel.exists({username: username});
+            if(!userExists) {
+                console.log("Cannot add song: user does not exist");
+                return false;
+            }
+    
+            await userModel.updateOne({username: username}, {$push: {songs: song}});
+    
+            console.log("Song "+ song.title +" successfully added to user "+ username);
+            return true;
+    
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+}
+
+//-----------
+
 //----------------------exports----------------------------
 
-export { userModel, User };
+export { userModel, User, Song };

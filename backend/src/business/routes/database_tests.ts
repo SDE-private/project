@@ -23,7 +23,7 @@ router.post('/add_user', async (req, res) => {
     //doesn't matter if already connected.. it will check if it is connected before startign the whole procedure
     await connectToDatabase();
 
-    const created : boolean = await createUser({username: uname, email: mail});
+    const created : boolean = await createUser({username: uname, email: mail, songs: []});
     if (created) {
         res.send("New user ("+uname+") successfully added");
     } else {
