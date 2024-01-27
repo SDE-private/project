@@ -13,10 +13,13 @@ const ytDlController = async (
         const url: string = req.body.url;
         console.log("url taken from request: " + url)
         if (!url) {
-            return res.status(400).send({ error: "link is required" });
+            console.log("yt-dl error: link is required")
+            return res.status(400).send("Link is required");
         }
-
-        // rischio con await di bloccare il server
+        else if (url.indexOf("https://www.youtube.com/watch?v=") !== 0) {
+            console.log("yt-dl error: url is not valid");
+            return res.status(400).send("Url is not valid");
+        }
         await youtubedl(url, {
             extractAudio: true,
             audioFormat: "mp3",
@@ -24,13 +27,13 @@ const ytDlController = async (
             output: "%(title)s.%(ext)s",
         }).then(output => console.log(output));
 
-        res.status(200).send("Video scaricato correttamente");
+        res.status(200).send("Video downloaded successfully");
 
     } catch (error) {
         console.log(error);
         return res
             .status(500)
-            .send("Non sono riuscito a scaricare il video al link specificato");
+            .send("Something went wrong downloading the video...");
     }
 };
 
