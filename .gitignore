@@ -1,6 +1,9 @@
 **/node_modules/
 **/dist/
 
+# Other database files
+backend/volumes/*
+
 # Miscellaneous
 frontend/*.class
 frontend/*.log
