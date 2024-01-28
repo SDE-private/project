@@ -1,6 +1,6 @@
 import express from "express";
 import youtubedl, { Payload } from "youtube-dl-exec";
-import { Song, addSong} from "../database/database.js";
+import { Song, addSong, connectToDatabase} from "../database/database.js";
 import fs from "fs";
 
 const ytDlController = async (
@@ -19,42 +19,69 @@ const ytDlController = async (
             return res.status(400).send("Url is not valid");
         }
 
-        // se decidiamo di togliere await, ytdlOutput sarà una Promise<Payload>
-        let ytdlOutput: Payload = await youtubedl(url, {
-            dumpSingleJson: true,
+        let ytdlVideoDownload: Promise<Payload> = youtubedl(url, {
             extractAudio: true,
             audioFormat: "mp3",
-            audioQuality: 0,
-            output: "%(title)s.%(ext)s",
+            audioQuality: 5,
+            output: "song.%(ext)s",
         });
 
-        console.log("ytdlOutput TITLE: " + ytdlOutput.title);
+        let ytdlInfo: Payload = await youtubedl(url, {
+            dumpSingleJson: true, //se true, il video non viene scaricato. Vengono solo restituite le informazioni
+            extractAudio: true,
+            audioFormat: "mp3",
+        });
 
+        console.log("ytdlOutput TITLE: " + ytdlInfo.title); //questo funziona solo se dumpSingleJson è true, altrimenti è undefined
+
+        await ytdlVideoDownload;
         console.log("Video downloaded successfully");
-        res.status(200).send("Video downloaded successfully");
+        // res.status(200).send("Video downloaded successfully");
 
         //---------------------------------- THE FOLLOWING PART SHOULDN'T BE HERE ----------------------------------
-        if (ytdlOutput.title === undefined) {
+        if (ytdlInfo.title === undefined) {
             console.log("yt-dl error: title is undefined");
             return res.status(500).send("Internal error");
         }
-        // //convert the mp3 video into Binary Data
+        //convert the mp3 video into Binary Data
         const base_path: string = "/app"
-        const audio_path: string = base_path + "/" + ytdlOutput.title + ".mp3";
-        const audio_data: Buffer = fs.readFileSync(audio_path);
-        //transform the video into a song
-        const song: Song = {
-            title: ytdlOutput.title,
-            upload_timestamp: Date.now(),
-            song: audio_data
-        }
+        //const audio_path: string = base_path + "/" + ytdlOutput.title + ".mp3";
+        const audio_path: string = base_path + "/song.mp3";
 
-        //add the song to the user's library
-        const username = req.body.username;
-        addSong(username, song);
+        try {
+            const audio_data: Buffer = fs.readFileSync(audio_path);
+            console.log("Mp3 song read successfully")
+            //transform the video into a song
+            const song: Song = {
+                title: ytdlInfo.title,
+                upload_timestamp: Date.now(),
+                song: audio_data
+            }
+
+            //add the song to the user's library
+            const username = req.body.username;
+
+            await connectToDatabase();
+            if (await addSong(username, song))
+                console.log("Song added to the user's library");
+            else 
+                console.log("Error adding the song to the user's library");
+
+            //delete the video
+            console.log("Deleting video");
+            fs.rm(audio_path, (err) => {
+                if (err) {
+                    console.log("Error deleting the video: " + err);
+                }
+            })
+        }
+        catch (error) {
+            console.log(error);
+            return res.status(500).send("Something went wrong reading the video...");
+        }
         //---------------------------------- THE PREVIOUS PART SHOULDN'T BE HERE ----------------------------------
 
-        return res;
+        return res.status(200).send("Video downloaded successfully");
 
     } catch (error) {
         console.log(error);
