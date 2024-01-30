@@ -30,3 +30,28 @@ router.post('/add_user', async (req, res) => {
         res.status(400).send("Cannot add user ("+uname+")");
     }
 });
+
+router.get('/get_users', async (req, res) => {
+    console.log("Getting users...");
+    await connectToDatabase();
+
+    const users = await userModel.find({});
+    if (users) {
+        res.send(users);
+    } else {
+        res.status(400).send("Cannot get users");
+    }
+});
+
+router.get('/get_user/:username', async (req, res) => {
+    console.log("Getting user "+req.params.username+".");
+    const uname : string = req.params.username;
+    await connectToDatabase();
+
+    const user = await userModel.findOne({username: uname});
+    if (user) {
+        res.send(user);
+    } else {
+        res.status(400).send("Cannot get user");
+    }
+});

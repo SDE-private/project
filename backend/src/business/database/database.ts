@@ -160,6 +160,29 @@ export async function addSong(username: string, song: Song) {
 
 //-----------
 
+export async function getUser(username: string) {
+    
+        if (!isConnected) {
+            console.log("No connection to the db... impossible to get user");
+            return null;
+        }
+    
+        try {
+            const user: User|null = await userModel.findOne({username: username});
+            if(!user) {
+                console.log("Cannot get user: user does not exist");
+                return null;
+            }
+            else {
+                console.log("User "+ username +" successfully retrieved");
+                return user;
+            }
+        } catch (error) {
+            console.log(error);
+            return null;
+        }
+}
+
 //----------------------exports----------------------------
 
 export { userModel, User, Song };

@@ -26,21 +26,30 @@ const ytDlController = async (
         console.log("ytdlOutput TITLE: " + ytdlInfo.title); //questo funziona solo se dumpSingleJson è true, altrimenti è undefined
         console.log("video duration: " + ytdlInfo.duration);
 
-        //check title and duration of the requested video
-        if (!validVideoInfo(ytdlInfo, res)) 
-            return res.status(400).send("Invalid video reference");
+        //check if the video is already downloaded
+        if (!alreadyDownloaded(ytdlInfo.id)) {
 
-        let ytdlVideoDownload: Promise<Payload>;
-            //start downloading the video
-            ytdlVideoDownload = youtubedl(url, {
-                extractAudio: true,
-                audioFormat: "mp3",
-                audioQuality: 5,
-                output: basePath+"/"+ytdlInfo.id+".%(ext)s",
-            });
+            //check title and duration of the requested video
+            if (!validVideoInfo(ytdlInfo, res)) {
+                console.log("Invalid video reference")
+                return res.status(400).send("Invalid video reference");
+            }
 
-        await ytdlVideoDownload;
-        console.log("Video downloaded successfully");
+            let ytdlVideoDownload: Promise<Payload>;
+                //start downloading the video
+                ytdlVideoDownload = youtubedl(url, {
+                    extractAudio: true,
+                    audioFormat: "mp3",
+                    audioQuality: 5,
+                    output: basePath+"/"+ytdlInfo.id+".%(ext)s",
+                });
+
+            await ytdlVideoDownload;
+            console.log("Video downloaded successfully");
+        }
+        else {
+            console.log("Video already downloaded. Skipping download...");
+        }
 
         //---------------------------------- THE FOLLOWING PART SHOULDN'T BE HERE ----------------------------------
 
@@ -95,6 +104,18 @@ function validVideoInfo(ytdlInfo: Payload, res: express.Response) {
         return false;
     }
     return true;
+}
+
+//---------------
+
+function alreadyDownloaded(videoId: string) {
+    return fs.existsSync(basePath+"/"+videoId+".mp3");
+}
+
+//---------------
+
+export function getSongPath(songId: string) {
+    return basePath+"/"+songId+".mp3";
 }
 
 //---------------
