@@ -4,9 +4,11 @@ import mongoose from 'mongoose';
 //----------------------types----------------------------
 
 interface Song {
+    id: string;
     title: string;
     upload_timestamp: number;
-    song: BinaryData;
+    yt_url: string;
+    // song: BinaryData;
 }
 
 //typescript interface to represent a MongoDB document type
@@ -21,9 +23,11 @@ interface User {
 
 //create a schema for the song. A schema is a blueprint for the document
 const songSchema = new mongoose.Schema<Song>({
+    id: {type: String, required: true},
     title: {type: String, required: true},
     upload_timestamp: {type: Number, required: true},
-    song: {type: Buffer, required: true}
+    yt_url: {type: String, required: true},
+    // song: {type: Buffer, required: true}
 });
 
 //create a schema for the user. A schema is a blueprint for the document
@@ -135,6 +139,11 @@ export async function addSong(username: string, song: Song) {
             const userExists = await userModel.exists({username: username});
             if(!userExists) {
                 console.log("Cannot add song: user does not exist");
+                return false;
+            }
+            const songAlreadyLinked = await userModel.exists({username: username, songs: {$elemMatch: {id: song.id}}});
+            if(songAlreadyLinked) {
+                console.log("Cannot add song: song already linked to the user");
                 return false;
             }
     

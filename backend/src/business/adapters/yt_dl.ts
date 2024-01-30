@@ -3,54 +3,7 @@ import youtubedl, { Payload } from "youtube-dl-exec";
 import { Song, addSong, connectToDatabase} from "../database/database.js";
 import fs from "fs";
 
-const audioPath : string = "/app/song.mp3";
-
-//---------------------functions---------------------
-
-function checkUrl(url: string, res: express.Response) {
-        console.log("Analizing URL: " + url)
-    if (!url) {
-        console.log("yt-dl error: link is required")
-        return res.status(400).send("Link is required");
-    }
-    else if (url.indexOf("https://www.youtube.com/watch?v=") !== 0) {
-        console.log("yt-dl error: url is not valid");
-        return res.status(400).send("Url is not valid");
-    }
-}
-
-//---------------
-
-function validVideoInfo(ytdlInfo: Payload, res: express.Response) {
-    if (ytdlInfo.title === undefined) {
-        console.log("yt-dl error: title is undefined");
-        return false;
-    }
-    else if (ytdlInfo.duration > 600) {
-        console.log("yt-dl error: video too long");
-        return false;
-    }
-    return true;
-}
-
-//---------------
-
-function fromMP3toSong(mp3Path: string, songTitle: string) {
-    try {
-        const audio_data: Buffer = fs.readFileSync(mp3Path);
-
-        console.log("Mp3 song read successfully")
-        //transform the video into a song
-        return {
-            title: songTitle,
-            upload_timestamp: Date.now(),
-            song: audio_data
-        }
-    } catch (error) {
-        console.log("Error reading the mp3 file: " + error);
-    }
-    return null;
-}
+const basePath: string = "/media";
 
 //---------------------controller---------------------
 
@@ -83,19 +36,19 @@ const ytDlController = async (
                 extractAudio: true,
                 audioFormat: "mp3",
                 audioQuality: 5,
-                output: "song.%(ext)s",
+                output: basePath+"/"+ytdlInfo.id+".%(ext)s",
             });
 
         await ytdlVideoDownload;
         console.log("Video downloaded successfully");
-        // res.status(200).send("Video downloaded successfully");
 
         //---------------------------------- THE FOLLOWING PART SHOULDN'T BE HERE ----------------------------------
 
-        //read the downloaded video
-        const song: Song|null = fromMP3toSong(audioPath, ytdlInfo.title);
-        if(song === null)
-            return res.status(500).send("Error converting the video to a song");
+        //create the song obj
+        const song: Song = { id: ytdlInfo.id, 
+                             title: ytdlInfo.title, 
+                             upload_timestamp: Date.now(), 
+                             yt_url: url };
         
         //add the song to the user's library
         await connectToDatabase();
@@ -104,14 +57,6 @@ const ytDlController = async (
         else 
             console.log("Error adding the song to the user's library");
 
-        //delete the video
-        console.log("Deleting video");
-        fs.rm(audioPath, (err) => {
-            if (err) {
-                console.log("Error deleting the video: " + err);
-            }
-        })
-        
         //---------------------------------- THE PREVIOUS PART SHOULDN'T BE HERE ----------------------------------
 
         return res.status(200).send("Video downloaded successfully");
@@ -123,6 +68,37 @@ const ytDlController = async (
             .send("Something went wrong downloading the video...");
     }
 };
+
+//---------------------functions---------------------
+
+function checkUrl(url: string, res: express.Response) {
+        console.log("Analizing URL: " + url)
+    if (!url) {
+        console.log("yt-dl error: link is required")
+        return res.status(400).send("Link is required");
+    }
+    else if (url.indexOf("https://www.youtube.com/watch?v=") !== 0) {
+        console.log("yt-dl error: url is not valid");
+        return res.status(400).send("Url is not valid");
+    }
+}
+
+//---------------
+
+function validVideoInfo(ytdlInfo: Payload, res: express.Response) {
+    if (ytdlInfo.title === undefined) {
+        console.log("yt-dl error: title is undefined");
+        return false;
+    }
+    else if (ytdlInfo.duration > 600) {
+        console.log("yt-dl error: video too long");
+        return false;
+    }
+    return true;
+}
+
+//---------------
+
 
 
 export default ytDlController;
