@@ -28,6 +28,8 @@ passport.use(
 const requireGoogleAuth = passport.authenticate("google", {
   scope: ["profile", "email"],
   failureRedirect: "/auth/failed",
+  keepSessionInfo: true,
+  // successReturnToOrRedirect: "/auth/success",
 });
 
 export { requireGoogleAuth };

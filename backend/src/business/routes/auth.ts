@@ -29,7 +29,8 @@ middleware.get("/google/callback", requireGoogleAuth, (req: any, res) => {
   };
   const token = generateJWT(user);
   res.cookie("sde-token", token);
-  res.redirect("/auth/success");
+  const returnTo = req.cookies["sde-returnTo"] || "/auth/success";
+  res.redirect(returnTo);
 });
 
 middleware.get("/test", check, (req, res) => {

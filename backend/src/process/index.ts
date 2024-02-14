@@ -9,7 +9,12 @@ const app: Express = express();
 app.use(express.json());
 app.use(cors());
 app.use("/", router);
+app.use("/app", (req, res) => res.send("Hello World"));
 
-app.use("/api-docs", swaggerUi.serveFiles(config.swagger_specs), swaggerUi.setup(config.swagger_specs));
+app.use(
+  "/api-docs",
+  swaggerUi.serveFiles(config.swagger_specs),
+  swaggerUi.setup(config.swagger_specs),
+);
 
 export default app;
