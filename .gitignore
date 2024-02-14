@@ -12,7 +12,7 @@ try{
 **/dist/
 
 # Other database files
-backend/volumes/
+volumes/
 
 # Miscellaneous
 frontend/*.class
