@@ -37,4 +37,13 @@ services:
       - 3001:3001
     volumes:
       - ./volumes/songs:/media
+  
+  spleeter-lib:
+    build: ./spleeter
+    image: spleeter_image
+    container_name: sde-spleeter_lib
+    ports: 
+      - 5000:5000
+    volumes:
+      - ./volumes/songs:/media
 
