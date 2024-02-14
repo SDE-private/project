@@ -1,8 +1,3 @@
-# write a Dockerfile to build a docker image with the following requirements:
-# ubutnu 18.04
-# conda
-# python 3.7
-
 FROM ubuntu:18.04
 ENV PATH="/root/miniconda3/bin:${PATH}"
 ARG PATH="/root/miniconda3/bin:${PATH}"
@@ -22,3 +17,13 @@ RUN conda install python=3.8 -y
 RUN conda install -c conda-forge ffmpeg libsndfile -y
 
 RUN pip install spleeter
+
+RUN pip install fastapi uvicorn python-multipart requests_toolbelt
+
+EXPOSE 5000
+
+COPY src/ /app
+
+WORKDIR /app
+
+CMD ["python", "app.py"]
