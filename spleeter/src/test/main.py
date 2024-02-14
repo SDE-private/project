@@ -1,8 +1,8 @@
 import requests
 
 url = 'http://localhost:5000/'
-files = {'file': open('test.mp3', 'rb')}
+payload = {'id': 'test'}
 
-r = requests.post(url, files=files)
+r = requests.post(url, json=payload)
 res = r.json()
-print(res.keys())
+print(res)
