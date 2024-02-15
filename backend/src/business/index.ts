@@ -8,7 +8,6 @@ import session from "express-session";
 import passport from "passport";
 import middleware from "./routes/auth.js";
 import "./middleware/oauth.js";
-import "./middleware/jwt.js";
 import cookieParser from "cookie-parser";
 
 const app: Express = express();
