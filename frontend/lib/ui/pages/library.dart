@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/classes/song.dart';
+import 'package:frontend/providers/user.dart';
 import 'package:frontend/ui/alerts/add_song.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class LibraryPage extends StatefulWidget {
   const LibraryPage({super.key});
@@ -16,6 +19,13 @@ class _LibraryPageState extends State<LibraryPage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: const Text("Library"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: _do_logout
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton.large(
         onPressed: _open_add_popup,
@@ -50,5 +60,10 @@ class _LibraryPageState extends State<LibraryPage> {
 
   void _open_song_page(int index) {
 
+  }
+
+  void _do_logout() {
+    context.read<UserProvider>().logout();
+    context.go('/login');
   }
 }

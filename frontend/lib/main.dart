@@ -1,4 +1,7 @@
+import 'package:provider/provider.dart';
+
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/user.dart';
 import 'package:frontend/ui/pages/auth.dart';
 import 'package:frontend/ui/pages/library.dart';
 import 'package:frontend/ui/pages/login.dart';
@@ -7,7 +10,12 @@ import 'package:go_router/go_router.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+      child: MyApp(),
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -17,7 +25,10 @@ class MyApp extends StatelessWidget {
     routes: [
       GoRoute(
         path: '/',
-        builder: (ctx, state) => const MyHomePage(title: 'Flutter Demo Home Page'),
+        builder: (ctx, state) {
+          bool logged = ctx.read<UserProvider>().is_logged();
+          return logged ? const LibraryPage() : const LoginPage();
+        }
       ),
       GoRoute(
         path: '/login',
@@ -47,29 +58,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routerConfig: _router,
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: const LoginPage()
+      debugShowCheckedModeBanner: false
     );
   }
 }

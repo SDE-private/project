@@ -80,14 +80,6 @@ class _SongPageState extends State<SongPage> {
                   onChangeEnd: (value) => multiplayer.update_players(value),
                   value: multiplayer.get_slider_value(),
                 )
-                // Text(
-                //   _position != null
-                //       ? '$_positionText / $_durationText'
-                //       : _duration != null
-                //           ? _durationText
-                //           : '',
-                //   style: const TextStyle(fontSize: 16.0),
-                // ),
               ],
             );
           }
