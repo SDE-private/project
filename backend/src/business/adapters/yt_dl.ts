@@ -1,6 +1,6 @@
 import express from "express";
 import youtubedl, { Payload } from "youtube-dl-exec";
-import { addSong, connectToDatabase, Song } from "../database/database.js";
+import { addSong, connectToDatabase, Song } from "./db_controller.js";
 import fs from "fs";
 
 const basePath: string = "/media";

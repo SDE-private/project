@@ -3,7 +3,7 @@ import {
   connectToDatabase,
   createUser,
   userModel,
-} from "../database/database.js";
+} from "../adapters/db_controller.js";
 
 const router = Router();
 export default router;

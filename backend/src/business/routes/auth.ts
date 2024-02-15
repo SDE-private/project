@@ -1,7 +1,7 @@
 import { Router } from "express";
 import generateJWT from "../utils.js";
 import { requireGoogleAuth } from "../middleware/oauth.js";
-import { createUser, getUser, User } from "../database/database.js";
+import { createUser, getUser, User } from "../adapters/db_controller.js";
 import check from "../middleware/check.js";
 
 const middleware = Router();

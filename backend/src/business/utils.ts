@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { User } from "./database/database";
+import { User } from "./adapters/db_controller";
 
 const generateJWT = (user: User) => {
   return jwt.sign(

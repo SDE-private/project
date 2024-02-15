@@ -7,7 +7,7 @@ router.get("/login", check, (req, res) => {
   res.redirect("/app");
 });
 
-router.get("/", (req, res) => res.send("Hello World"));
+router.get("/", (req, res) => res.send("Hello World (Process)"));
 
 router.get("/logout", (req, res) => {
   res.redirect(
