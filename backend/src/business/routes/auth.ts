@@ -1,7 +1,7 @@
 import { Router } from "express";
 import generateJWT from "../utils.js";
 import { requireGoogleAuth } from "../middleware/oauth.js";
-import { User } from "../database/database.js";
+import { createUser, getUser, User } from "../database/database.js";
 import check from "../middleware/check.js";
 
 const middleware = Router();
@@ -19,18 +19,35 @@ middleware.get("/success", check, (req, res) => {
   res.send(`Welcome ${user.username}!`);
 });
 
-middleware.get("/google", requireGoogleAuth);
+middleware.get(
+  "/google",
+  (req: any, res, next) => {
+    req.session.redirect = req.query.redirect || "/auth/success";
+    next();
+  },
+  requireGoogleAuth,
+);
 
-middleware.get("/google/callback", requireGoogleAuth, (req: any, res) => {
-  const user: User = {
-    username: req.user.displayName,
-    email: req.user.emails[0].value,
-    songs: [],
-  };
-  const token = generateJWT(user);
-  res.cookie("sde-token", token);
-  const returnTo = req.cookies["sde-returnTo"] || "/auth/success";
-  res.redirect(returnTo);
+middleware.get("/google/callback", requireGoogleAuth, async (req: any, res) => {
+  try {
+    let user = await getUser(req.user.displayName);
+    if (user === null) {
+      user = {
+        username: req.user.displayName,
+        email: req.user.emails[0].value,
+        songs: [],
+      };
+      await createUser(user);
+      user = await getUser(req.user.displayName);
+    }
+    req.user = user;
+    const token = generateJWT(req.user);
+    res.cookie("sde-token", token);
+    const returnTo = req.session.redirect;
+    res.redirect(returnTo);
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 middleware.get("/test", check, (req, res) => {
@@ -40,7 +57,8 @@ middleware.get("/test", check, (req, res) => {
 middleware.get("/logout", (req, res) => {
   req.logout(() => {
     res.clearCookie("sde-token");
-    res.redirect("/auth/");
+    const redirect = req.query.redirect || "/auth";
+    res.redirect(redirect as string);
   });
 });
 

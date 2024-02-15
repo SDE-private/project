@@ -3,13 +3,22 @@ import router from "./routes/index.js";
 import cors from "cors";
 import config from "./config.js";
 import swaggerUi from "swagger-ui-express";
+import cookieParser from "cookie-parser";
+import session from "express-session";
 
 const app: Express = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
+app.use(
+  session({
+    secret: "sde",
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
 app.use("/", router);
-app.use("/app", (req, res) => res.send("Hello World"));
 
 app.use(
   "/api-docs",

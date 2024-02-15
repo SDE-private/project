@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.8'
 
 volumes:
   database-data:
@@ -9,13 +9,15 @@ services:
     image: mongo
     container_name: mongodb
     restart: unless-stopped
-    #environment:
-    #  MONGO_INITDB_ROOT_USERNAME: root
-    #  MONGO_INITDB_ROOT_PASSWORD: password
+    user: "1000:1000"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: sde
     ports:
       - 27017:27017
     volumes:
-      - ./volumes/database-data:/data/db 
+      - ./volumes/database-data:/data/db
 
   mongo-express:
     image: mongo-express
@@ -23,16 +25,24 @@ services:
     ports:
       - 8081:8081
     environment:
-      #ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      #ME_CONFIG_MONGODB_ADMINPASSWORD: password
-      #ME_CONFIG_MONGODB_URL: mongodb://root:password@mongodb:27017/
-      ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+      ME_CONFIG_MONGODB_URL: mongodb://root:password@mongodb:27017/sde?authSource=admin&readPreference=primary&ssl=false&directConnection=true
+    #      ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/
 
   backend-server:
     build: ./backend
     image: backend_image
     container_name: sde-backend_server
-    ports: 
+    develop:
+      watch:
+        - action: rebuild
+          source: .
+          target: .
+          ignore:
+            - node_modules
+            - volumes
+    ports:
       - 3000:3000
       - 3001:3001
     volumes:

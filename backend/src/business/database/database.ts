@@ -84,9 +84,10 @@ export async function connectToDatabase() {
   }
 
   try {
-    await mongoose.connect("mongodb://mongodb:27017/users");
-    //TODO: L'AUTENTICAZIONE NON FUNZIONA
-    //await connect('mongodb://root:password@mongodb:27017/prova');
+    // await mongoose.connect("mongodb://mongodb:27017/users");
+    await mongoose.connect(
+      "mongodb://root:password@mongodb:27017/sde?authSource=admin&readPreference=primary&ssl=false&directConnection=true",
+    );
     return true;
   } catch (error) {
     console.log(error);
@@ -98,8 +99,7 @@ export async function connectToDatabase() {
 
 export async function createUser(user: User) {
   if (!isConnected) {
-    console.log("No connection to the db... impossible to add user");
-    return false;
+    await connectToDatabase();
   }
 
   try {
@@ -125,8 +125,7 @@ export async function createUser(user: User) {
 
 export async function addSong(username: string, song: Song) {
   if (!isConnected) {
-    console.log("No connection to the db... impossible to add song");
-    return false;
+    await connectToDatabase();
   }
 
   try {
@@ -164,8 +163,7 @@ export async function addSong(username: string, song: Song) {
 
 export async function getUser(username: string) {
   if (!isConnected) {
-    console.log("No connection to the db... impossible to get user");
-    return null;
+    await connectToDatabase();
   }
 
   try {
