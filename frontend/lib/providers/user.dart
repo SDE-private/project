@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/controllers/user.dart';
 
 class UserProvider with ChangeNotifier {
   String? token;
+  UserController? ctrl;
 
   bool is_logged() {
     return token == null ? false : true;
@@ -9,6 +11,7 @@ class UserProvider with ChangeNotifier {
 
   void login(String auth_token) {
     token = auth_token;
+    ctrl = UserController(get_headers()!);
   }
 
   void logout() {
