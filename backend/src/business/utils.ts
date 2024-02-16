@@ -6,7 +6,6 @@ const generateJWT = (user: User) => {
     {
       username: user.username,
       email: user.email,
-      songs: user.songs,
     },
     "sde",
     {

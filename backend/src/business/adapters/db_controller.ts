@@ -18,6 +18,11 @@ interface User {
   songs: Song[];
 }
 
+interface UserInfo {
+  username: string;
+  email: string;
+}
+
 //----------------------schemas and models----------------------------
 
 //create a schema for the song. A schema is a blueprint for the document
@@ -183,4 +188,5 @@ export async function getUser(username: string) {
 
 //----------------------exports----------------------------
 
-export { userModel, User, Song };
+export { Song, User, UserInfo, userModel };
+
