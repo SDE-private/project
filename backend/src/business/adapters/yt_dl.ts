@@ -69,7 +69,7 @@ const ytDlController = async (req: express.Request, res: express.Response) => {
 
     //---------------------------------- THE PREVIOUS PART SHOULDN'T BE HERE ----------------------------------
 
-    return res.status(200).send("Video downloaded successfully");
+    return res.status(200).json(song);
   } catch (error) {
     console.log(error);
     return res
