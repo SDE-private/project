@@ -1,22 +1,22 @@
 import express from "express";
 
-type MoroofyRequest = {
+type MaroofyRequest = {
   title: string;
 };
 
-type MoroofyResponse = Array<{
+type MaroofyResponse = Array<{
   song_name: string;
   artist_name: string;
   url: string;
 }>;
 
-const moroofyController = async (
+const maroofyController = async (
   req: express.Request,
   res: express.Response,
 ) => {
   try {
     // convert body to MoroofyRequest
-    const data: MoroofyRequest = req.body;
+    const data: MaroofyRequest = req.body;
     if (!data.title) {
       return res.status(400).json({ error: "title is required" });
     }
@@ -48,17 +48,17 @@ const moroofyController = async (
     }
 
     const similarData = similarResponse[0].result.data.json;
-    const top10 = similarData.slice(0, 10);
-    const top10Response: MoroofyResponse = top10.map((song: any) => ({
+    const top5 = similarData.slice(0, 5);
+    const top5Response: MaroofyResponse = top5.map((song: any) => ({
       song_name: song.name,
       artist_name: song.artist_display_name,
       url: song.preview_url,
     }));
 
-    res.status(200).json(top10Response);
+    res.status(200).json(top5Response);
   } catch (error) {
     return res.status(500).json({ error: (error as Error).message });
   }
 };
 
-export default moroofyController;
+export default maroofyController;

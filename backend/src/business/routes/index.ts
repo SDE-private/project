@@ -1,6 +1,7 @@
 import { Router } from "express";
-import moroofyController from "../adapters/moroofy.js";
+import maroofyController from "../adapters/maroofy.js";
 import ytDlController from "../adapters/yt_dl.js";
+import spleeterController from "../adapters/spleeter.js";
 
 const router = Router();
 
@@ -70,8 +71,10 @@ const router = Router();
  *
  *
  */
-router.post("/maroofy", moroofyController);
+router.post("/maroofy", maroofyController);
 
 router.post("/yt-dl", ytDlController);
+
+router.post("/spleeter", spleeterController);
 
 export default router;

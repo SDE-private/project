@@ -128,6 +128,49 @@ export async function createUser(user: User) {
 
 //-----------
 
+export async function isAlreadyAnalyzed(username: string, songId: string) {
+  if (!isConnected) {
+    await connectToDatabase();
+  }
+
+  try {
+    const song = await userModel.findOne(
+      { username: username, "songs.id": songId },
+      { "songs.$": 1 },
+    );
+    if (!song) {
+      console.log("Cannot check if song is already analyzed: song not found");
+      return false;
+    } else {
+      console.log("Song " + songId + " successfully retrieved");
+      console.log(song.songs[0].analyzed);
+      return song.songs[0].analyzed;
+    }
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+//-----------
+
+export async function setAnalyzed(username: string, songId: string) {
+  if (!isConnected) {
+    await connectToDatabase();
+  }
+
+  try {
+    await userModel.updateOne(
+      { username: username, "songs.id": songId },
+      { $set: { "songs.$.analyzed": true } },
+    );
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+//-----------
+
 export async function addSong(username: string, song: Song) {
   if (!isConnected) {
     await connectToDatabase();
@@ -189,4 +232,3 @@ export async function getUser(username: string) {
 //----------------------exports----------------------------
 
 export { Song, User, UserInfo, userModel };
-
