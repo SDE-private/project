@@ -18,8 +18,10 @@ const moroofyController = async (
     // convert body to MoroofyRequest
     const data: MoroofyRequest = req.body;
     if (!data.title) {
-      return res.status(400).send({ error: "title is required" });
+      return res.status(400).json({ error: "title is required" });
     }
+
+    console.log(data.title);
 
     const libraryApi = `https://itunes.apple.com/search?term=${encodeURIComponent(
       data.title.trim(),
@@ -31,7 +33,7 @@ const moroofyController = async (
     // return first result
     const track_id = libraryResponse.results[0].trackId;
     if (!track_id) {
-      return res.status(404).send({ error: "song not found" });
+      return res.status(404).json({ error: "song not found" });
     }
 
     // return result
@@ -42,7 +44,7 @@ const moroofyController = async (
     const similarResponse = await fetch(similarApi).then((res) => res.json());
 
     if (!similarResponse) {
-      return res.status(400).send({ error: "similar songs not found" });
+      return res.status(400).json({ error: "similar songs not found" });
     }
 
     const similarData = similarResponse[0].result.data.json;
@@ -53,9 +55,9 @@ const moroofyController = async (
       url: song.preview_url,
     }));
 
-    res.status(200).send(top10Response);
+    res.status(200).json(top10Response);
   } catch (error) {
-    return res.status(500).send({ error: (error as Error).message });
+    return res.status(500).json({ error: (error as Error).message });
   }
 };
 
