@@ -14,7 +14,7 @@ songsRouter.post("/download", check, async (req, res) => {
 
   try {
     const url = 'http://localhost:3000/yt-dl'; 
-    const data = { url: req.body.link, username: uname}; // Dati da inviare nella richiesta POST, sostituisci con i tuoi dati
+    const data = { url: req.body.url, username: uname}; // Dati da inviare nella richiesta POST, sostituisci con i tuoi dati
     const options = {
       method: 'POST',
       headers: {
@@ -26,7 +26,7 @@ songsRouter.post("/download", check, async (req, res) => {
     console.log('Invio della richiesta al server:', data, options)
 
     const response = await fetch(url, options); // Effettua la richiesta POST
-    const responseData = await response.json(); // Estrai i dati JSON dalla risposta
+    const responseData = await response; // Estrai i dati JSON dalla risposta
 
     console.log('Risposta dal server:', responseData);
   } catch (error) {
