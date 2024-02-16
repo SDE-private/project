@@ -6,10 +6,6 @@ import check from "../middleware/check.js";
 
 const middleware = Router();
 
-middleware.get("/", (req, res) => {
-  res.json({ message: "You are not logged in" });
-});
-
 middleware.get("/failed", (req, res) => {
   res.send("Failed");
 });
@@ -48,10 +44,6 @@ middleware.get("/google/callback", requireGoogleAuth, async (req: any, res) => {
   } catch (error) {
     console.log(error);
   }
-});
-
-middleware.get("/test", check, (req, res) => {
-  res.send(req.user);
 });
 
 middleware.get("/logout", (req, res) => {

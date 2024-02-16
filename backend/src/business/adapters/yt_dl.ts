@@ -11,7 +11,11 @@ const ytDlController = async (req: express.Request, res: express.Response) => {
   try {
     const username: string = req.body.username;
     const url: string = req.body.url;
-    checkUrl(url, res);
+    const errorMessage = checkUrl(url);
+    if (errorMessage) {
+      res.status(400).send(errorMessage);
+      return;
+    }
 
     //getting video info (doesn't download the video)
     const ytdlInfo: Payload = await youtubedl(url, {
@@ -26,7 +30,7 @@ const ytDlController = async (req: express.Request, res: express.Response) => {
     //check if the video is already downloaded
     if (!alreadyDownloaded(ytdlInfo.id)) {
       //check title and duration of the requested video
-      if (!validVideoInfo(ytdlInfo, res)) {
+      if (!validVideoInfo(ytdlInfo)) {
         console.log("Invalid video reference");
         return res.status(400).send("Invalid video reference");
       }
@@ -76,20 +80,22 @@ const ytDlController = async (req: express.Request, res: express.Response) => {
 
 //---------------------functions---------------------
 
-function checkUrl(url: string, res: express.Response) {
+function checkUrl(url: string) {
   console.log("Analizing URL: " + url);
   if (!url) {
     console.log("yt-dl error: link is required");
-    return res.status(400).send("Link is required");
+    return "Link is required";
   } else if (url.indexOf("https://www.youtube.com/watch?v=") !== 0) {
     console.log("yt-dl error: url is not valid");
-    return res.status(400).send("Url is not valid");
+    return "Url is not valid";
+  } else {
+    return null;
   }
 }
 
 //---------------
 
-function validVideoInfo(ytdlInfo: Payload, res: express.Response) {
+function validVideoInfo(ytdlInfo: Payload) {
   if (ytdlInfo.title === undefined) {
     console.log("yt-dl error: title is undefined");
     return false;
