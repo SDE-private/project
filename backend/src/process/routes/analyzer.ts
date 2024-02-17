@@ -5,7 +5,6 @@ import { User } from "../../business/adapters/db_controller.js";
 const analyzeRouter = Router();
 
 analyzeRouter.post("/split/:id", check, async (req, res) => {
-  // TODO: check if working
   const result = await fetch(`http://localhost:3000/spleeter`, {
     method: "POST",
     body: JSON.stringify({
