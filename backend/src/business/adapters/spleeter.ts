@@ -26,7 +26,12 @@ const spleeterController = async (req, res) => {
         return res.status(200).json(result);
       }
     } else {
-      return res.status(200).json({ message: "song already analyzed" });
+      return res.status(200).json({
+        stems: {
+          vocals: `/media/${req.body.id}/vocals.wav`,
+          accompaniment: `/media/${req.body.id}/accompaniment.wav`,
+        },
+      });
     }
   } catch (error) {
     return res.status(500).json({ error: (error as Error).message });
