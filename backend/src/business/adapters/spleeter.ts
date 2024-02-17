@@ -22,7 +22,7 @@ const spleeterController = async (req, res) => {
       if (!result) {
         return res.status(404).json({ error: "song not found" });
       } else {
-        setAnalyzed(req.body.username, req.body.id);
+        await setAnalyzed(req.body.username, req.body.id);
         return res.status(200).json(result);
       }
     } else {
