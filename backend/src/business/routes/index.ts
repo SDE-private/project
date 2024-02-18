@@ -12,6 +12,8 @@ const router = Router();
  *     post:
  *       summary: Retrieve a list of similar songs
  *       description: Retrieve a list of similar songs given a song title
+ *       security:
+ *        - cookieAuth: []
  *       requestBody:
  *         required: true
  *         content:
@@ -68,7 +70,13 @@ const router = Router();
  *                   error:
  *                     type: "string"
  *
- */
+ * components:
+ *   securitySchemes:
+ *     cookieAuth:
+ *       type: apiKey
+ *       in: cookie
+ *       name: sde-token  
+ */ 
 router.post("/maroofy", check, maroofyController);
 
 
