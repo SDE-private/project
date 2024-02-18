@@ -8,7 +8,7 @@ const router = Router();
 
 /**
  * @swagger
- *   /moorofy:
+ *   /maroofy:
  *     post:
  *       summary: Retrieve a list of similar songs
  *       description: Retrieve a list of similar songs given a song title
@@ -143,6 +143,79 @@ router.post("/maroofy", check, maroofyController);
  */ 
 router.post("/yt-dl", check, ytDlController);
 
+/**
+ * @swagger
+ *   /spleeter:
+ *     post:
+ *       summary: Split audio file
+ *       description: Split an audio file into its component tracks
+ *       security:
+ *        - cookieAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: "HsLqNFIFxnk"
+ *       responses:
+ *         '200':
+ *           description: Successfully split audio file
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   stems:
+ *                     type: object
+ *                     properties:   
+ *                       accompaniment:       
+ *                         type: string       
+ *                         example: "/media/HsLqNFIFxnk/accompaniment.wav"
+ *                       vocals:       
+ *                         type: string       
+ *                         example: "/media/HsLqNFIFxnk/vocals.wav"
+ *         '400':
+ *           description: Bad request, missing parameter
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   error:
+ *                     type: string
+ *                     example: "id is required"
+ *         '404':
+ *           description: Song not found
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   error:
+ *                     type: string
+ *                     example: "song not found"
+ *         '500':
+ *           description: Server encountered a problem
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   error:
+ *                     type: string
+ *                     example: "Internal Server Error"
+ * 
+ * components:
+ *   securitySchemes:
+ *     cookieAuth:
+ *       type: apiKey
+ *       in: cookie
+ *       name: sde-token  
+ */
 router.post("/spleeter", check, spleeterController);
 
 export default router;
