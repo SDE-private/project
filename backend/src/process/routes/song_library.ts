@@ -87,11 +87,22 @@ songsRouter.get("/songs", check, (req, res) => {
  *           application/json:
  *             schema:
  *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   description: Messaggio di conferma
- *                   example: "Canzone scaricata con successo"
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     example: "HsLqNFIFxnk"
+ *                   title:
+ *                     type: string
+ *                     example: "PoP_X 'Io Centro Con I Missili'"
+ *                   upload_timestamp:
+ *                     type: integer
+ *                     example: 1708093435972
+ *                   yt_url:
+ *                     type: string
+ *                     example: "https://www.youtube.com/watch?v=HsLqNFIFxnk"
+ *                   analyzed:
+ *                     type: boolean
+ *                     example: false
  *       '500':
  *         description: Si è verificato un errore durante la richiesta
  *         content:
@@ -130,8 +141,9 @@ songsRouter.post("/download", check, async (req, res) => {
     console.log("Invio della richiesta al server:", data, options);
     const response = await fetch(url, options); // Effettua la richiesta POST
 
-    console.log("Risposta dal server:", await response.json());
-    res.status(200).json({ message: "Canzone scaricata con successo" });
+    let response_json = await response.json();
+    console.log("Risposta dal server:", response_json);
+    res.status(200).json(response_json);
   } catch (error) {
     console.error("Si è verificato un errore durante la richiesta:", error);
     res.status(500).json({ error: "Si è verificato un errore durante la richiesta" });
