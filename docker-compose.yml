@@ -52,16 +52,16 @@ services:
     build: ./spleeter
     image: spleeter_image
     container_name: sde-spleeter_lib
-    ports: 
+    ports:
       - 5000:5000
     volumes:
       - ./volumes/songs:/media
 
-  frontend:
-    build: ./frontend
-    image: frontend_image
-    container_name: sde-frontend
-    ports:
-      - 80:80
-    volumes:
-      - ./volumes/songs:/media
+#  frontend:
+#    build: ./frontend
+#    image: frontend_image
+#    container_name: sde-frontend
+#    ports:
+#      - 80:80
+#    volumes:
+#      - ./volumes/songs:/media

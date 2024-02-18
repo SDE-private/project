@@ -12,9 +12,9 @@ export default router;
 router.get("/conn", async (req, res) => {
   const connected = await connectToDatabase();
   if (connected) {
-    res.send("Connessione avvenuta");
+    res.status(200).json({ status: "Connected" });
   } else {
-    res.status(500).send("Connessione fallita");
+    res.status(400).json({ status: "Not connected" });
   }
 });
 
@@ -32,9 +32,12 @@ router.post("/add_user", async (req, res) => {
     songs: [],
   });
   if (created) {
-    res.send("New user (" + uname + ") successfully added");
+    const user = await userModel.findOne({
+      username: uname,
+    });
+    res.status(200).json(user);
   } else {
-    res.status(400).send("Cannot add user (" + uname + ")");
+    res.status(400).json({ error: "Cannot add user" });
   }
 });
 
@@ -44,21 +47,21 @@ router.get("/get_users", async (req, res) => {
 
   const users = await userModel.find({});
   if (users) {
-    res.send(users);
+    res.status(200).json(users);
   } else {
-    res.status(400).send("Cannot get users");
+    res.status(400).json({ error: "Cannot get users" });
   }
 });
 
 router.get("/get_user/:username", async (req, res) => {
-  console.log("Getting user " + req.params.username + ".");
-  const uname: string = req.params.username;
+  const uname = decodeURIComponent(req.params.username);
+  console.log("Getting user " + uname + ".");
   await connectToDatabase();
 
   const user = await userModel.findOne({ username: uname });
   if (user) {
-    res.send(user);
+    res.status(200).json(user);
   } else {
-    res.status(400).send("Cannot get user");
+    res.status(400).json({ error: "Cannot get user " + uname });
   }
 });

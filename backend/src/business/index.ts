@@ -27,7 +27,7 @@ app.use(passport.session());
 
 app.use("/auth", middleware);
 app.use("/", router);
-app.use("/db-tests", routerDB);
+app.use("/db", routerDB);
 app.use(
   "/api-docs",
   swaggerUi.serveFiles(config.swagger_specs),

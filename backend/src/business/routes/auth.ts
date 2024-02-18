@@ -1,7 +1,7 @@
 import { Router } from "express";
 import generateJWT from "../utils.js";
 import { requireGoogleAuth } from "../middleware/oauth.js";
-import { createUser, getUser, User } from "../adapters/db_controller.js";
+import { User } from "../adapters/db_controller.js";
 import check from "../middleware/check.js";
 
 const middleware = Router();
@@ -26,17 +26,26 @@ middleware.get(
 
 middleware.get("/google/callback", requireGoogleAuth, async (req: any, res) => {
   try {
-    let user = await getUser(req.user.displayName);
-    if (user === null) {
-      user = {
+    const username = encodeURIComponent(req.user.displayName);
+    let user = await fetch(`http://localhost:3000/db/get_user/${username}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (user.status !== 200) {
+      const user_info = {
         username: req.user.displayName,
         email: req.user.emails[0].value,
         songs: [],
       };
-      await createUser(user);
-      user = await getUser(req.user.displayName);
+      user = await fetch("http://localhost:3000/db/add_user", {
+        method: "POST",
+        body: JSON.stringify(user_info),
+        headers: { "Content-Type": "application/json" },
+      });
     }
-    req.user = user;
+    req.user = await user.json();
     const token = generateJWT(req.user);
     res.cookie("sde-token", token);
     const returnTo = req.session.redirect;
