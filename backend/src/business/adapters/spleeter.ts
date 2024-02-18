@@ -1,4 +1,5 @@
 import { isAlreadyAnalyzed, setAnalyzed } from "./db_controller.js";
+import { User } from "./db_controller.js";
 
 // @ts-expect-error types
 const spleeterController = async (req, res) => {
@@ -7,12 +8,10 @@ const spleeterController = async (req, res) => {
       return res.status(400).json({ error: "id is required" });
     }
 
-    if (!req.body.username) {
-      return res.status(400).json({ error: "username is required" });
-    }
-
-    if (!(await isAlreadyAnalyzed(req.body.username, req.body.id))) {
-      const id = { id: req.body.id };
+    let username = (req.user as User).username;
+    let song_id = req.body.id;
+    if (!(await isAlreadyAnalyzed(username, song_id))) {
+      const id = { id: song_id };
       const result = await fetch(`http://sde-spleeter_lib:5000/`, {
         method: "POST",
         body: JSON.stringify(id),
@@ -22,14 +21,14 @@ const spleeterController = async (req, res) => {
       if (!result) {
         return res.status(404).json({ error: "song not found" });
       } else {
-        await setAnalyzed(req.body.username, req.body.id);
+        await setAnalyzed(username, song_id);
         return res.status(200).json(result);
       }
     } else {
       return res.status(200).json({
         stems: {
-          vocals: `/media/${req.body.id}/vocals.wav`,
-          accompaniment: `/media/${req.body.id}/accompaniment.wav`,
+          vocals: `/media/${song_id}/vocals.wav`,
+          accompaniment: `/media/${song_id}/accompaniment.wav`,
         },
       });
     }
