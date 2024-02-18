@@ -103,7 +103,7 @@ songsRouter.post("/download", check, async (req, res) => {
 
     const response = await fetch(url, options); // Effettua la richiesta POST
 
-    console.log("Risposta dal server:", await response);
+    console.log("Risposta dal server:", await response.json());
     res.status(200).json({ message: "Canzone scaricata con successo" });
   } catch (error) {
     console.error("Si è verificato un errore durante la richiesta:", error);
