@@ -6,6 +6,7 @@ const analyzeRouter = Router();
 
 /**
  * @swagger
+ * paths:
  *  /analyze/split/{id}:
  *     post:
  *       tags:
@@ -20,6 +21,8 @@ const analyzeRouter = Router();
  *             type: string
  *             description: ID of the audio file
  *             example: "HsLqNFIFxnk"
+ *       security:
+ *        - cookieAuth: []
  *       responses:
  *          '200':
  *            description: Successfully split audio file
@@ -48,7 +51,14 @@ const analyzeRouter = Router();
  *                    error:
  *                      type: string
  *                      example: "Internal Server Error"
- */
+ * 
+ * components:
+ *   securitySchemes:
+ *     cookieAuth:
+ *       type: apiKey
+ *       in: cookie
+ *       name: sde-token  
+ */ 
 analyzeRouter.post("/split/:id", check, async (req, res) => {
   const result = await fetch(`http://localhost:3000/spleeter`, {
     method: "POST",
