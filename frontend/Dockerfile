@@ -2,7 +2,7 @@
 FROM nginx:latest
 
 # Copia i file della web app Flutter nella directory /usr/share/nginx/html
-COPY build/web/ /usr/share/nginx/html/app
+COPY app/build/web/ /usr/share/nginx/html/app
 
 # Copia il file di configurazione personalizzato per Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
