@@ -2,6 +2,7 @@ import express from "express";
 import youtubedl, { Payload } from "youtube-dl-exec";
 import { addSong, connectToDatabase, Song } from "./db_controller.js";
 import fs from "fs";
+import { User } from "./db_controller.js";
 
 const basePath: string = "/media";
 
@@ -9,7 +10,8 @@ const basePath: string = "/media";
 
 const ytDlController = async (req: express.Request, res: express.Response) => {
   try {
-    const username: string = req.body.username;
+    //const username: string = req.body.username; //old version without authentication
+    const username: string = (req.user as User).username;
     const url: string = req.body.url;
     const errorMessage = checkUrl(url);
     if (errorMessage) {
@@ -32,7 +34,7 @@ const ytDlController = async (req: express.Request, res: express.Response) => {
       //check title and duration of the requested video
       if (!validVideoInfo(ytdlInfo)) {
         console.log("Invalid video reference");
-        return res.status(400).send("Invalid video reference");
+        return res.status(400).json({message: "Invalid video reference"});
       }
 
       let ytdlVideoDownload: Promise<Payload>;
@@ -74,7 +76,7 @@ const ytDlController = async (req: express.Request, res: express.Response) => {
     console.log(error);
     return res
       .status(500)
-      .send("Something went wrong downloading the video...");
+      .json({message: "Something went wrong downloading the video..."});
   }
 };
 
