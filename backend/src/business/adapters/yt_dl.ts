@@ -15,7 +15,7 @@ const ytDlController = async (req: express.Request, res: express.Response) => {
     const url: string = req.body.url;
     const errorMessage = checkUrl(url);
     if (errorMessage) {
-      res.status(400).send(errorMessage);
+      res.status(400).json({error: errorMessage});
       return;
     }
 
@@ -34,7 +34,7 @@ const ytDlController = async (req: express.Request, res: express.Response) => {
       //check title and duration of the requested video
       if (!validVideoInfo(ytdlInfo)) {
         console.log("Invalid video reference");
-        return res.status(400).json({message: "Invalid video reference"});
+        return res.status(400).json({error: "Invalid video reference"});
       }
 
       let ytdlVideoDownload: Promise<Payload>;
@@ -76,7 +76,7 @@ const ytDlController = async (req: express.Request, res: express.Response) => {
     console.log(error);
     return res
       .status(500)
-      .json({message: "Something went wrong downloading the video..."});
+      .json({error: "Something went wrong downloading the video..."});
   }
 };
 

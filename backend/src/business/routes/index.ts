@@ -71,6 +71,76 @@ const router = Router();
  */
 router.post("/maroofy", check, maroofyController);
 
+
+/**
+ * @swagger
+ *   /yt-dl:
+ *     post:
+ *       summary: Download a song from youtube
+ *       description: Providing a youtube link, you are able to download and add the song to yout library
+ *       security:
+ *        - cookieAuth: []
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 url:
+ *                   type: string
+ *                   example: "https://www.youtube.com/watch?v=HsLqNFIFxnk&pp=ygUXaW8gY2VudHJvIGNvbiBpIG1pc3NpbGk%3D"
+ *       responses:
+ *         '200':
+ *           description: Song's helpful information
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     example: "HsLqNFIFxnk"
+ *                   title:
+ *                     type: string
+ *                     example: "PoP_X 'Io Centro Con I Missili'"
+ *                   upload_timestamp:
+ *                     type: integer
+ *                     example: 1708093435972
+ *                   yt_url:
+ *                     type: string
+ *                     example: "https://www.youtube.com/watch?v=HsLqNFIFxnk"
+ *                   analyzed:
+ *                     type: boolean
+ *                     example: false
+ *         '400':
+ *           description: Invalid video reference
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: "object"
+ *                 properties:
+ *                   error:
+ *                     type: string
+ *                     example: Invalid video reference
+ *         '500':
+ *           description: General error
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: "object"
+ *                 properties:
+ *                   error:
+ *                     type: "string"
+ *                     example: Something went wrong downloading the video...
+ *
+ * components:
+ *   securitySchemes:
+ *     cookieAuth:
+ *       type: apiKey
+ *       in: cookie
+ *       name: sde-token  
+ */ 
 router.post("/yt-dl", check, ytDlController);
 
 router.post("/spleeter", check, spleeterController);
