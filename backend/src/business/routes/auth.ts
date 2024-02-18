@@ -47,9 +47,8 @@ middleware.get("/google/callback", requireGoogleAuth, async (req: any, res) => {
     }
     req.user = await user.json();
     const token = generateJWT(req.user);
-    res.cookie("sde-token", token);
-    const returnTo = req.session.redirect;
-    res.redirect(returnTo);
+    // res.redirect(`http://sde-frontend/#/auth?token=${token}`);
+    res.redirect(`http://localhost:8080/#/auth?token=${token}`);
   } catch (error) {
     console.log(error);
   }

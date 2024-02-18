@@ -4,13 +4,16 @@ import { User, UserInfo } from "../../business/adapters/db_controller.js";
 
 const check = (req: Request, res: Response, next: NextFunction) => {
   console.log(req.originalUrl);
-  const token = req.cookies["sde-token"];
+  const token = req.headers["authorization"] as string;
   if (token) {
     jwt.verify(token, "sde", async (err: any, user: any) => {
       if (err) {
+        console.log(err);
+        // TODO: should just return an error
         res.redirect(
           `http://localhost:3000/auth/google?redirect=http://localhost:3001${req.originalUrl}`,
         );
+        return;
       }
       const infos = user as UserInfo;
       const username = encodeURIComponent(infos!.username);
@@ -33,9 +36,11 @@ const check = (req: Request, res: Response, next: NextFunction) => {
       next();
     });
   } else {
+    // TODO: should just return an error
     res.redirect(
       `http://localhost:3000/auth/google?redirect=http://localhost:3001${req.originalUrl}`,
     );
+    return;
   }
 };
 
