@@ -121,12 +121,13 @@ songsRouter.post("/download", check, async (req, res) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json", // Assicurati di impostare l'header corretto per i dati che stai inviando
+        //@ts-ignore
+        "authorization": req.token
       },
       body: JSON.stringify(data), // Converti i dati in formato JSON prima di inviarli
     };
 
     console.log("Invio della richiesta al server:", data, options);
-
     const response = await fetch(url, options); // Effettua la richiesta POST
 
     console.log("Risposta dal server:", await response.json());
