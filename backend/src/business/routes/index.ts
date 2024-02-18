@@ -2,6 +2,7 @@ import { Router } from "express";
 import maroofyController from "../adapters/maroofy.js";
 import ytDlController from "../adapters/yt_dl.js";
 import spleeterController from "../adapters/spleeter.js";
+import check from "../middleware/check.js";
 
 const router = Router();
 
@@ -67,14 +68,11 @@ const router = Router();
  *                   error:
  *                     type: "string"
  *
- *
- *
- *
  */
-router.post("/maroofy", maroofyController);
+router.post("/maroofy", check, maroofyController);
 
-router.post("/yt-dl", ytDlController);
+router.post("/yt-dl", check, ytDlController);
 
-router.post("/spleeter", spleeterController);
+router.post("/spleeter", check, spleeterController);
 
 export default router;
