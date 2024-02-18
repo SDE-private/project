@@ -11,6 +11,8 @@ const songsRouter = Router();
  *    get:
  *      summary: Retrieve the user's songs in the library
  *      description: Retrieve the user's songs in the library
+ *      security:
+ *        - cookieAuth: []
  *      tags:
  *        - Songs Library
  *      responses:
@@ -43,6 +45,12 @@ const songsRouter = Router();
  *                      type: boolean
  *                      description: Whether the song has been analyzed by spleeter
  *                      example: false
+ * components:
+ *   securitySchemes:
+ *     cookieAuth:
+ *       type: apiKey
+ *       in: cookie
+ *       name: sde-token  
  */
 songsRouter.get("/songs", check, (req, res) => {
   const songs = (req.user as User).songs;
@@ -55,6 +63,8 @@ songsRouter.get("/songs", check, (req, res) => {
  *   post:
  *     summary: Scarica una canzone
  *     description: Questo endpoint consente di scaricare una canzone fornendo l'URL di youtube della canzone desiderata.
+ *     security:
+ *       - cookieAuth: []
  *     tags:
  *       - Songs Library
  *     requestBody:
@@ -84,6 +94,22 @@ songsRouter.get("/songs", check, (req, res) => {
  *                   example: "Canzone scaricata con successo"
  *       '500':
  *         description: Si è verificato un errore durante la richiesta
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Messaggio di conferma
+ *                   example: "Canzone scaricata con successo"
+ * 
+ * components:
+ *   securitySchemes:
+ *     cookieAuth:
+ *       type: apiKey
+ *       in: cookie
+ *       name: sde-token  
  */
 songsRouter.post("/download", check, async (req, res) => {
   const uname = (req.user as User).username;
@@ -107,7 +133,7 @@ songsRouter.post("/download", check, async (req, res) => {
     res.status(200).json({ message: "Canzone scaricata con successo" });
   } catch (error) {
     console.error("Si è verificato un errore durante la richiesta:", error);
-    res.status(500);
+    res.status(500).json({ error: "Si è verificato un errore durante la richiesta" });
   }
 });
 
@@ -119,6 +145,8 @@ songsRouter.post("/download", check, async (req, res) => {
  *         - Songs Library
  *       summary: Retrieve a list of similar songs
  *       description: Retrieve a list of similar songs given a song title
+ *       security:
+ *        - cookieAuth: []
  *       parameters:
  *         - in: path
  *           name: id
@@ -131,18 +159,18 @@ songsRouter.post("/download", check, async (req, res) => {
  *          '200':
  *            description: A list of similar songs
  *            content:
- *             application/json:
- *               schema:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     song_name:
- *                       type: string
- *                     artist_name:
- *                       type: string
- *                     url:
- *                       type: string
+ *              application/json:
+ *                schema:
+ *                  type: array
+ *                  items:
+ *                    type: object
+ *                    properties:
+ *                      song_name:
+ *                        type: string
+ *                      artist_name:
+ *                        type: string
+ *                      url:
+ *                        type: string
  *          '404':
  *            description: Song not found
  *            content:
@@ -150,7 +178,7 @@ songsRouter.post("/download", check, async (req, res) => {
  *                schema:
  *                  type: object
  *                  properties:
- *                    message:
+ *                    error:
  *                      type: string
  *                      example: "Song not found"
  *          '500':
@@ -160,9 +188,16 @@ songsRouter.post("/download", check, async (req, res) => {
  *                schema:
  *                  type: object
  *                  properties:
- *                    message:
+ *                    error:
  *                      type: string
  *                      example: "Server encountered a problem"
+ * 
+ * components:
+ *   securitySchemes:
+ *     cookieAuth:
+ *       type: apiKey
+ *       in: cookie
+ *       name: sde-token  
  */
 songsRouter.get("/suggestion/:id", check, async (req, res) => {
   try {
@@ -171,7 +206,7 @@ songsRouter.get("/suggestion/:id", check, async (req, res) => {
     const song = songs.find((song) => song.id === id);
 
     if (!song) {
-      res.status(404).json({ message: "Song not found" });
+      res.status(404).json({ error: "Song not found" });
     } else {
       const url = "http://localhost:3000/maroofy";
       const data = { title: song.title }; // Dati da inviare nella richiesta POST, sostituisci con i tuoi dati
@@ -190,7 +225,7 @@ songsRouter.get("/suggestion/:id", check, async (req, res) => {
       res.status(200).json(responseData);
     }
   } catch (error) {
-    res.status(500).json({ message: "Server encountered a problem" });
+    res.status(500).json({ error: "Server encountered a problem" });
   }
 });
 
