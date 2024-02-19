@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { User } from "../../business/adapters/db_controller.js";
-import check from "../../check.js";
+import { check } from "../../business/middleware/check.js";
 
 const analyzeRouter = Router();
 
@@ -33,14 +33,14 @@ const analyzeRouter = Router();
  *                  properties:
  *                    stems:
  *                      type: object
- *                      properties:   
- *                         accompaniment:       
- *                            type: string       
+ *                      properties:
+ *                         accompaniment:
+ *                            type: string
  *                            example: "/media/HsLqNFIFxnk/accompaniment.wav"
- *                         vocals:       
- *                            type: string       
+ *                         vocals:
+ *                            type: string
  *                            example: "/media/HsLqNFIFxnk/vocals.wav"
- *                      
+ *
  *          '500':
  *            description: Server encountered a problem
  *            content:
@@ -51,14 +51,14 @@ const analyzeRouter = Router();
  *                    error:
  *                      type: string
  *                      example: "Internal Server Error"
- * 
+ *
  * components:
  *   securitySchemes:
  *     tokenAuth:
  *       type: apiKey
  *       in: headers
- *       name: authorization 
- */ 
+ *       name: authorization
+ */
 analyzeRouter.post("/split/:id", check, async (req, res) => {
   const result = await fetch(`http://localhost:3000/spleeter`, {
     method: "POST",
@@ -69,7 +69,7 @@ analyzeRouter.post("/split/:id", check, async (req, res) => {
     headers: {
       "Content-Type": "application/json",
       //@ts-ignore
-      "authorization": req.token
+      authorization: req.token,
     },
   })
     .then((response) => response.json())

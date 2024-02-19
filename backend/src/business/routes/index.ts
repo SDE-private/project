@@ -1,5 +1,5 @@
 import { Router } from "express";
-import check from "../../check.js";
+import { check } from "../middleware/check.js";
 import maroofyController from "../adapters/maroofy.js";
 import spleeterController from "../adapters/spleeter.js";
 import ytDlController from "../adapters/yt_dl.js";
@@ -76,9 +76,8 @@ const router = Router();
  *       type: apiKey
  *       in: headers
  *       name: authorization
- */ 
+ */
 router.post("/maroofy", check, maroofyController);
-
 
 /**
  * @swagger
@@ -148,7 +147,7 @@ router.post("/maroofy", check, maroofyController);
  *       type: apiKey
  *       in: headers
  *       name: authorization
- */ 
+ */
 router.post("/yt-dl", check, ytDlController);
 
 /**
@@ -179,12 +178,12 @@ router.post("/yt-dl", check, ytDlController);
  *                 properties:
  *                   stems:
  *                     type: object
- *                     properties:   
- *                       accompaniment:       
- *                         type: string       
+ *                     properties:
+ *                       accompaniment:
+ *                         type: string
  *                         example: "/media/HsLqNFIFxnk/accompaniment.wav"
- *                       vocals:       
- *                         type: string       
+ *                       vocals:
+ *                         type: string
  *                         example: "/media/HsLqNFIFxnk/vocals.wav"
  *         '400':
  *           description: Bad request, missing parameter
@@ -216,7 +215,7 @@ router.post("/yt-dl", check, ytDlController);
  *                   error:
  *                     type: string
  *                     example: "Internal Server Error"
- * 
+ *
  * components:
  *   securitySchemes:
  *     tokenAuth:

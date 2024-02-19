@@ -2,8 +2,10 @@ import { Router } from "express";
 import {
   connectToDatabase,
   createUser,
+  User,
   userModel,
 } from "../adapters/db_controller.js";
+import { checkUser } from "../middleware/check.js";
 
 const router = Router();
 export default router;
@@ -14,15 +16,15 @@ router.get("/conn", async (req, res) => {
   if (connected) {
     res.status(200).json({ status: "Connected" });
   } else {
-    console.log("Not connected");
     res.status(400).json({ status: "Not connected" });
   }
 });
 
-router.post("/add_user", async (req, res) => {
-  console.log("Adding user...");
-  const uname: string = req.body.username;
-  const mail: string = req.body.email;
+router.post("/add_current_user", checkUser, async (req, res) => {
+  const user = req.user as User;
+  const uname = user.username;
+  const mail = user.email;
+  console.log("Getting user " + uname + ".");
 
   //doesn't matter if already connected.. it will check if it is connected before startign the whole procedure
   await connectToDatabase();
@@ -38,28 +40,12 @@ router.post("/add_user", async (req, res) => {
     });
     res.status(200).json(user);
   } else {
-    console.log("Cannot add user");
     res.status(400).json({ error: "Cannot add user" });
   }
 });
 
-//TODO: remove if unused (unsafe)
-router.get("/get_users", async (req, res) => {
-  console.log("Getting users...");
-  await connectToDatabase();
-
-  const users = await userModel.find({});
-  if (users) {
-    res.status(200).json(users);
-  } else {
-    console.log("Cannot get users");
-    res.status(400).json({ error: "Cannot get users" });
-  }
-});
-
-//TODO: remove if unused (unsafe)
-router.get("/get_user/:username", async (req, res) => {
-  const uname = decodeURIComponent(req.params.username);
+router.get("/get_current_user", checkUser, async (req, res) => {
+  const uname = (req.user as User).username;
   console.log("Getting user " + uname + ".");
   await connectToDatabase();
 
@@ -67,10 +53,8 @@ router.get("/get_user/:username", async (req, res) => {
   if (user) {
     res.status(200).json(user);
   } else {
-    console.log("Cannot get user " + uname);
     res.status(400).json({ error: "Cannot get user " + uname });
   }
 });
-
 
 //fixa docs e aggiungi quelli del db

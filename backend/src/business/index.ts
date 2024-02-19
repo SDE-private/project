@@ -5,7 +5,6 @@ import session from "express-session";
 import passport from "passport";
 import swaggerUi from "swagger-ui-express";
 import config from "./config.js";
-import "./middleware/oauth.js";
 import middleware from "./routes/auth.js";
 import routerDB from "./routes/database_tests.js";
 import router from "./routes/index.js";
@@ -13,7 +12,7 @@ import router from "./routes/index.js";
 const app: Express = express();
 
 app.use(express.json());
-app.use(cors({origin:'*'}));
+app.use(cors({ origin: "*" }));
 app.use(cookieParser());
 app.use(
   session({

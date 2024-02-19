@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { User } from "../../business/adapters/db_controller";
-import check from "../../check.js";
+import { User } from "../../business/adapters/db_controller.js";
+import { check } from "../../business/middleware/check.js";
 
 const songsRouter = Router();
 
@@ -50,7 +50,7 @@ const songsRouter = Router();
  *     tokenAuth:
  *       type: apiKey
  *       in: headers
- *       name: authorization  
+ *       name: authorization
  */
 songsRouter.get("/songs", check, (req, res) => {
   const songs = (req.user as User).songs;
@@ -114,7 +114,7 @@ songsRouter.get("/songs", check, (req, res) => {
  *                   type: string
  *                   description: Messaggio di conferma
  *                   example: "Canzone scaricata con successo"
- * 
+ *
  * components:
  *   securitySchemes:
  *     tokenAuth:
@@ -133,7 +133,7 @@ songsRouter.post("/download", check, async (req, res) => {
       headers: {
         "Content-Type": "application/json", // Assicurati di impostare l'header corretto per i dati che stai inviando
         //@ts-ignore
-        "authorization": req.token
+        authorization: req.token,
       },
       body: JSON.stringify(data), // Converti i dati in formato JSON prima di inviarli
     };
@@ -141,12 +141,14 @@ songsRouter.post("/download", check, async (req, res) => {
     console.log("Invio della richiesta al server:", data, options);
     const response = await fetch(url, options); // Effettua la richiesta POST
 
-    let response_json = await response.json();
+    const response_json = await response.json();
     console.log("Risposta dal server:", response_json);
     res.status(200).json(response_json);
   } catch (error) {
     console.error("Si è verificato un errore durante la richiesta:", error);
-    res.status(500).json({ error: "Si è verificato un errore durante la richiesta" });
+    res
+      .status(500)
+      .json({ error: "Si è verificato un errore durante la richiesta" });
   }
 });
 
@@ -204,7 +206,7 @@ songsRouter.post("/download", check, async (req, res) => {
  *                    error:
  *                      type: string
  *                      example: "Server encountered a problem"
- * 
+ *
  * components:
  *   securitySchemes:
  *     tokenAuth:

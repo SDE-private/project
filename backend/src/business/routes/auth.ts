@@ -20,7 +20,7 @@ middleware.get(
 
 middleware.get("/google/callback", requireGoogleAuth, async (req: any, res) => {
   try {
-    let user_info = {
+    const user_info = {
       username: req.user.displayName,
       email: req.user.emails[0].value,
     };
@@ -32,9 +32,8 @@ middleware.get("/google/callback", requireGoogleAuth, async (req: any, res) => {
         authorization: token,
       },
     });
-    console.log(user.status);
     if (user.status !== 200) {
-      user = await fetch("http://localhost:3000/db/add_user", {
+      user = await fetch("http://localhost:3000/db/add_current_user", {
         method: "POST",
         body: JSON.stringify(user_info),
         headers: {
@@ -44,8 +43,8 @@ middleware.get("/google/callback", requireGoogleAuth, async (req: any, res) => {
       });
     }
     req.user = await user.json();
-    // res.redirect(`http://sde-frontend/#/auth?token=${token}`);
-    res.redirect(`http://localhost/#/auth?token=${token}`);
+    if (!req.user.error) res.redirect(`http://localhost/#/auth?token=${token}`);
+    else res.redirect("/auth/failed");
   } catch (error) {
     console.log(error);
   }
