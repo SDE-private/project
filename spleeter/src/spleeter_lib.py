@@ -13,7 +13,7 @@ def generate_random_string():
 
 def spawn_spleeter(input_path: str):
   process = subprocess.Popen(
-    ['spleeter', 'separate', '-p', 'spleeter:2stems', '-o', OUTPUT_DIR, input_path],
+    ['spleeter', 'separate', '-p', 'spleeter:2stems', '-o', OUTPUT_DIR, '-c', 'mp3', input_path],
     stdout=subprocess.PIPE, 
     stderr=subprocess.PIPE
   )
@@ -21,7 +21,7 @@ def spawn_spleeter(input_path: str):
 
 def read_output(output_path: str):
   output = {}
-  for file in glob.glob(output_path + '/*.wav'):
+  for file in glob.glob(output_path + '/*.mp3'):
     what = file.split('/')[-1].split('.')[0]
     output[what] = file
   return output
