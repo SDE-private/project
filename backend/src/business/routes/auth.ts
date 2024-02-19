@@ -50,12 +50,4 @@ middleware.get("/google/callback", requireGoogleAuth, async (req: any, res) => {
   }
 });
 
-middleware.get("/logout", (req, res) => {
-  req.logout(() => {
-    res.clearCookie("sde-token");
-    const redirect = req.query.redirect || "/auth";
-    res.redirect(redirect as string);
-  });
-});
-
 export default middleware;
