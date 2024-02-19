@@ -4,6 +4,8 @@ import {
   createUser,
   userModel,
 } from "../adapters/db_controller.js";
+import { User } from "../adapters/db_controller.js";
+import check from "../middleware/check.js";
 
 const router = Router();
 export default router;
@@ -41,6 +43,7 @@ router.post("/add_user", async (req, res) => {
   }
 });
 
+//TODO: remove if unused (unsafe)
 router.get("/get_users", async (req, res) => {
   console.log("Getting users...");
   await connectToDatabase();
@@ -53,6 +56,7 @@ router.get("/get_users", async (req, res) => {
   }
 });
 
+//TODO: remove if unused (unsafe)
 router.get("/get_user/:username", async (req, res) => {
   const uname = decodeURIComponent(req.params.username);
   console.log("Getting user " + uname + ".");
@@ -65,3 +69,19 @@ router.get("/get_user/:username", async (req, res) => {
     res.status(400).json({ error: "Cannot get user " + uname });
   }
 });
+
+//TODO: capire se può essere un'alternativa sicura a get_user/:username
+router.get("/get_current_user", check, async (req, res) => {
+  const uname = (req.user as User).username;
+  console.log("Getting user " + uname + ".");
+  await connectToDatabase();
+
+  const user = await userModel.findOne({ username: uname });
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(400).json({ error: "Cannot get user " + uname });
+  }
+});
+
+//fixa docs e aggiungi quelli del db
