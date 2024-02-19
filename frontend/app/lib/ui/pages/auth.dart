@@ -14,11 +14,9 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
-    print(widget.token);
     if (widget.token == null) {
       return const Placeholder();
-    }
-    else {
+    } else {
       context.read<UserProvider>().login(widget.token!);
       context.go('/library');
     }

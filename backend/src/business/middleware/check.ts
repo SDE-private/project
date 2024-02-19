@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { User, UserInfo } from "../adapters/db_controller";
 
 const check = (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.headers);
   const token = req.headers["authorization"] as string;
   if (token) {
     //@ts-ignore
