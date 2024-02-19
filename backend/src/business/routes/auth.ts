@@ -7,12 +7,14 @@ import check from "../middleware/check.js";
 const middleware = Router();
 
 middleware.get("/failed", (req, res) => {
-  res.send("Failed");
+  res.json({
+    error: "failed",
+  });
 });
 
 middleware.get("/success", check, (req, res) => {
   const user = req.user as User;
-  res.send(`Welcome ${user.username}!`);
+  res.json(user);
 });
 
 middleware.get(

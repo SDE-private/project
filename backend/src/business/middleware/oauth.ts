@@ -27,7 +27,7 @@ passport.use(
 
 const requireGoogleAuth = passport.authenticate("google", {
   scope: ["profile", "email"],
-  failureRedirect: "/auth/failed",
+  // failureRedirect: "/auth/failed",
   keepSessionInfo: true,
   // successReturnToOrRedirect: "/auth/success",
 });
