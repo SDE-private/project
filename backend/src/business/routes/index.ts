@@ -10,6 +10,8 @@ const router = Router();
  * @swagger
  *   /maroofy:
  *     post:
+ *       tags:
+ *         - Suggestions
  *       summary: Retrieve a list of similar songs
  *       description: Retrieve a list of similar songs given a song title
  *       security:
@@ -83,6 +85,8 @@ router.post("/maroofy", check, maroofyController);
  * @swagger
  *   /yt-dl:
  *     post:
+ *       tags:
+ *         - Youtube downloader
  *       summary: Download a song from youtube
  *       description: Providing a youtube link, you are able to download and add the song to yout library
  *       security:
@@ -154,6 +158,8 @@ router.post("/yt-dl", check, ytDlController);
  * @swagger
  *   /spleeter:
  *     post:
+ *       tags:
+ *         - Analyzer 
  *       summary: Split audio file
  *       description: Split an audio file into its component tracks
  *       security:

@@ -57,11 +57,11 @@ services:
     volumes:
       - ./volumes/songs:/media
 
-  frontend:
-    build: ./frontend
-    image: frontend_image
-    container_name: sde-frontend
-    ports:
-      - 80:80
-    volumes:
-      - ./volumes/songs:/usr/share/nginx/html/static/
+#  frontend:
+#    build: ./frontend
+#    image: frontend_image
+#    container_name: sde-frontend
+#    ports:
+#      - 80:80
+#    volumes:
+#      - ./volumes/songs:/usr/share/nginx/html/static/
