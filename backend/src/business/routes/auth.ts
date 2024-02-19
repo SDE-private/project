@@ -12,15 +12,9 @@ middleware.get("/failed", (req, res) => {
   });
 });
 
-middleware.get("/success", check, (req, res) => {
-  const user = req.user as User;
-  res.json(user);
-});
-
 middleware.get(
   "/google",
   (req: any, res, next) => {
-    req.session.redirect = req.query.redirect || "/auth/success";
     next();
   },
   requireGoogleAuth,
