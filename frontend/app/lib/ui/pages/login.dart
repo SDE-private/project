@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'dart:html' as html;
 import 'package:sign_in_button/sign_in_button.dart';
 
 class LoginPage extends StatefulWidget {
@@ -26,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _do_login() {
-    context.go(Uri(path: "/auth", queryParameters: {"token": "ciao"}).toString());
+    // context.go(Uri(path: "/auth", queryParameters: {"token": "ciao"}).toString());
+    html.window.location.replace("http://localhost:3000/auth/google");
   }
 }

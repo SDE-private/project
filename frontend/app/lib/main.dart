@@ -1,3 +1,5 @@
+import 'package:frontend/classes/song.dart';
+import 'package:frontend/ui/pages/song.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter/material.dart';
@@ -43,6 +45,13 @@ class MyApp extends StatelessWidget {
         builder: (ctx, state) {
           String? token = state.uri.queryParameters['token'];
           return AuthPage(token: token);
+        }
+      ),
+      GoRoute(
+        path: '/song',
+        builder: (ctx, state) {
+          Song song = state.extra as Song;
+          return SongPage(song: song);
         }
       )
     ]

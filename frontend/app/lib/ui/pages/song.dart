@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/classes/instruments.dart';
 import 'package:frontend/classes/multiplayer.dart';
+import 'package:frontend/classes/song.dart';
 
 class SongPage extends StatefulWidget {
-  const SongPage({super.key});
+  Song song;
+
+  SongPage({super.key, required this.song});
 
   @override
   State<SongPage> createState() => _SongPageState();
 }
 
 class _SongPageState extends State<SongPage> {
-  Multiplayer multiplayer = Multiplayer();
+  late Multiplayer multiplayer;
 
   void _toggle_instrument(Instrument ins) {
     setState(() {
@@ -21,7 +24,7 @@ class _SongPageState extends State<SongPage> {
   @override
   void initState() {
     super.initState();
-    
+    multiplayer = Multiplayer(widget.song.id);
   }
 
   @override
@@ -74,11 +77,6 @@ class _SongPageState extends State<SongPage> {
                       icon: const Icon(Icons.pause),
                     ),
                   ],
-                ),
-                Slider(
-                  onChanged: (value) => {},
-                  onChangeEnd: (value) => multiplayer.update_players(value),
-                  value: multiplayer.get_slider_value(),
                 )
               ],
             );

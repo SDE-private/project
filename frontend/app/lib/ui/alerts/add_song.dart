@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/user.dart';
+import 'package:provider/provider.dart';
 
 final AddSongDialog = (BuildContext ctx) => AlertDialog(
   title: const Text("Add song"),
@@ -8,10 +10,11 @@ final AddSongDialog = (BuildContext ctx) => AlertDialog(
   ),
   actions: [
     MaterialButton(
-      child: const Text("Add"),
+      child: const Text("Download"),
       onPressed: () {
-        // TODO: download the song
-        Navigator.pop(ctx);
+        print("das");
+        // ctx.read<UserProvider>().ctrl!.download_song("https://www.youtube.com/watch?v=kJQP7kiw5Fk");
+        // Navigator.pop(ctx);
       }
     )
   ],

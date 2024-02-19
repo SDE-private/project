@@ -9,26 +9,21 @@ class Multiplayer with ChangeNotifier {
   Duration current_position = Duration.zero;
   bool is_playing = false, is_pause = true;
   
-  Multiplayer() {
+  Multiplayer(String song_id) {
     instruments = [
-      Instrument("bass", FontAwesomeIcons.bars, "bass.wav"),
-      Instrument("vocals", FontAwesomeIcons.microphone, "vocals.wav"),
-      Instrument("drums", FontAwesomeIcons.drum, "drums.wav"),
-      Instrument("others", FontAwesomeIcons.ellipsis, "other.wav"),
-      Instrument("piano", FontAwesomeIcons.music, "piano.wav"),
+      // Instrument("bass", FontAwesomeIcons.bars, "bass.wav"),
+      Instrument("vocals", FontAwesomeIcons.microphone, "http://localhost/static/$song_id/vocals.mp3"),
+      // Instrument("drums", FontAwesomeIcons.drum, "drums.wav"),
+      Instrument("accompaniment", FontAwesomeIcons.ellipsis, "http://localhost/static/$song_id/accompaniment.mp3"),
+      // Instrument("piano", FontAwesomeIcons.music, "piano.wav"),
     ];
 
-    instruments[0].player.onDurationChanged.listen((dur) {
-      duration = dur;
-      notifyListeners();
-    });
-
-    instruments[0].player.setSource(AssetSource(instruments[0].pathfile));
-    instruments[0].player.getDuration().then((value) {
-      if (value != null) {
-        duration = value;
+    instruments[0].player.setSource(UrlSource(instruments[0].pathfile));
+    for (final ins in instruments) {
+      if (ins.enabled) {
+        ins.player.setSource(UrlSource(ins.pathfile));
       }
-    });
+    }
   }
 
   double get_slider_value() {
@@ -44,7 +39,7 @@ class Multiplayer with ChangeNotifier {
     if (!is_playing) {
       for (final ins in instruments) {
         if (ins.enabled) {
-          ins.player.play(AssetSource(ins.pathfile));
+          ins.player.play(UrlSource(ins.pathfile));
         }
       }
       is_playing = true;
@@ -72,16 +67,6 @@ class Multiplayer with ChangeNotifier {
       }
     }
     is_pause = true;
-    notifyListeners();
-  }
-
-  void update_players(double value) async {
-    final position_millis = value * duration.inMilliseconds;
-    current_position = Duration(milliseconds: position_millis.round());
-    print("damn $value");
-    for (final ins in instruments) {
-      await ins.player.seek(current_position);
-    }
     notifyListeners();
   }
 }

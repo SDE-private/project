@@ -1,13 +1,15 @@
 class Song {
-  String id;
-  String name;
+  String id, title, yt_url;
+  bool analyzed;
 
-  Song(this.id, this.name);
+  Song(this.id, this.title, this.yt_url, this.analyzed);
+
+  factory Song.fromJSON(Map<String, dynamic> json) {
+    return Song(
+      json['id'],
+      json['title'],
+      json['yt_url'],
+      json['analyzed']
+    );
+  }
 }
-
-List<Song> SONGS = [
-  Song("1", "Maracaibo Lu Columbo"),
-  Song("2", "tesing in zona"),
-  Song("3", "azorzi is on the top"),
-  Song("4", "gigicamporealedj")
-];
