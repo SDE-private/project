@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import { User } from "./adapters/db_controller";
+import { UserInfo } from "./adapters/db_controller";
 
-const generateJWT = (user: User) => {
+const generateJWT = (user: UserInfo) => {
   return jwt.sign(
     {
       username: user.username,

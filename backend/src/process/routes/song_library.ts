@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { User } from "../../business/adapters/db_controller";
-import check from "../middleware/check.js";
+import check from "../../check.js";
 
 const songsRouter = Router();
 

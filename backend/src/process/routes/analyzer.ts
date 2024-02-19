@@ -1,6 +1,6 @@
 import { Router } from "express";
-import check from "../middleware/check.js";
 import { User } from "../../business/adapters/db_controller.js";
+import check from "../../check.js";
 
 const analyzeRouter = Router();
 
@@ -75,7 +75,6 @@ analyzeRouter.post("/split/:id", check, async (req, res) => {
     .then((response) => response.json())
     .then((data) => res.json(data))
     .catch((error) => res.status(500).json({ error: error.message }));
-  console.log(result);
 });
 
 export default analyzeRouter;

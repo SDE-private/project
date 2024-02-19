@@ -1,14 +1,14 @@
-import express, { Express } from "express";
-import router from "./routes/index.js";
-import routerDB from "./routes/database_tests.js";
+import cookieParser from "cookie-parser";
 import cors from "cors";
-import config from "./config.js";
-import swaggerUi from "swagger-ui-express";
+import express, { Express } from "express";
 import session from "express-session";
 import passport from "passport";
-import middleware from "./routes/auth.js";
+import swaggerUi from "swagger-ui-express";
+import config from "./config.js";
 import "./middleware/oauth.js";
-import cookieParser from "cookie-parser";
+import middleware from "./routes/auth.js";
+import routerDB from "./routes/database_tests.js";
+import router from "./routes/index.js";
 
 const app: Express = express();
 

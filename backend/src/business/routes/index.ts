@@ -1,8 +1,8 @@
 import { Router } from "express";
+import check from "../../check.js";
 import maroofyController from "../adapters/maroofy.js";
-import ytDlController from "../adapters/yt_dl.js";
 import spleeterController from "../adapters/spleeter.js";
-import check from "../middleware/check.js";
+import ytDlController from "../adapters/yt_dl.js";
 
 const router = Router();
 

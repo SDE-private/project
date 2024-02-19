@@ -4,8 +4,6 @@ import {
   createUser,
   userModel,
 } from "../adapters/db_controller.js";
-import { User } from "../adapters/db_controller.js";
-import check from "../middleware/check.js";
 
 const router = Router();
 export default router;
@@ -16,6 +14,7 @@ router.get("/conn", async (req, res) => {
   if (connected) {
     res.status(200).json({ status: "Connected" });
   } else {
+    console.log("Not connected");
     res.status(400).json({ status: "Not connected" });
   }
 });
@@ -39,6 +38,7 @@ router.post("/add_user", async (req, res) => {
     });
     res.status(200).json(user);
   } else {
+    console.log("Cannot add user");
     res.status(400).json({ error: "Cannot add user" });
   }
 });
@@ -52,6 +52,7 @@ router.get("/get_users", async (req, res) => {
   if (users) {
     res.status(200).json(users);
   } else {
+    console.log("Cannot get users");
     res.status(400).json({ error: "Cannot get users" });
   }
 });
@@ -66,22 +67,10 @@ router.get("/get_user/:username", async (req, res) => {
   if (user) {
     res.status(200).json(user);
   } else {
+    console.log("Cannot get user " + uname);
     res.status(400).json({ error: "Cannot get user " + uname });
   }
 });
 
-//TODO: capire se può essere un'alternativa sicura a get_user/:username
-router.get("/get_current_user", check, async (req, res) => {
-  const uname = (req.user as User).username;
-  console.log("Getting user " + uname + ".");
-  await connectToDatabase();
-
-  const user = await userModel.findOne({ username: uname });
-  if (user) {
-    res.status(200).json(user);
-  } else {
-    res.status(400).json({ error: "Cannot get user " + uname });
-  }
-});
 
 //fixa docs e aggiungi quelli del db

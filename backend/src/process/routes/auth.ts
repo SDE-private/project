@@ -1,12 +1,10 @@
 import { Router } from "express";
-import check from "../middleware/check.js";
+import { requireGoogleAuth } from "../../business/middleware/oauth.js";
 
 const authRouter = Router();
 
 //TODO: Questo endpoint server per davvero??
-authRouter.get("/login", check, (req, res) => {
-  res.redirect("/app");
-});
+authRouter.get("/login", requireGoogleAuth);
 
 authRouter.get("/logout", (req, res) => {
   res.redirect(

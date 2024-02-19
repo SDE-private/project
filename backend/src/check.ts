@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import { User, UserInfo } from "../../business/adapters/db_controller.js";
+import { User, UserInfo } from "./business/adapters/db_controller.js";
 
 const check = (req: Request, res: Response, next: NextFunction) => {
   console.log(req.originalUrl);
@@ -12,19 +12,18 @@ const check = (req: Request, res: Response, next: NextFunction) => {
       if (err) {
         console.log(err);
         // TODO: should just return an error
-        res.redirect(
-          `http://localhost:3000/auth/google?redirect=http://localhost:3001${req.originalUrl}`,
-        );
+        res.status(403).json({error: "Not a valid token" });
         return;
       }
       const infos = user as UserInfo;
       const username = encodeURIComponent(infos!.username);
       const songs = await fetch(
-        `http://localhost:3000/db/get_user/${username}`,
+        `http://localhost:3000/db/get_current_user`, //this is recursive
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            authorization: token,
           },
         },
       )
@@ -39,9 +38,7 @@ const check = (req: Request, res: Response, next: NextFunction) => {
     });
   } else {
     // TODO: should just return an error
-    res.redirect(
-      `http://localhost:3000/auth/google?redirect=http://localhost:3001${req.originalUrl}`,
-    );
+    res.status(403).json({error: "No token provided" });
     return;
   }
 };
