@@ -12,7 +12,7 @@ const songsRouter = Router();
  *      summary: Retrieve the user's songs in the library
  *      description: Retrieve the user's songs in the library
  *      security:
- *        - cookieAuth: []
+ *        - tokenAuth: []
  *      tags:
  *        - Songs Library
  *      responses:
@@ -47,9 +47,9 @@ const songsRouter = Router();
  *                      example: false
  * components:
  *   securitySchemes:
- *     cookieAuth:
+ *     tokenAuth:
  *       type: apiKey
- *       in: cookie
+ *       in: header
  *       name: sde-token  
  */
 songsRouter.get("/songs", check, (req, res) => {
@@ -64,7 +64,7 @@ songsRouter.get("/songs", check, (req, res) => {
  *     summary: Scarica una canzone
  *     description: Questo endpoint consente di scaricare una canzone fornendo l'URL di youtube della canzone desiderata.
  *     security:
- *       - cookieAuth: []
+ *       - tokenAuth: []
  *     tags:
  *       - Songs Library
  *     requestBody:
@@ -117,9 +117,9 @@ songsRouter.get("/songs", check, (req, res) => {
  * 
  * components:
  *   securitySchemes:
- *     cookieAuth:
+ *     tokenAuth:
  *       type: apiKey
- *       in: cookie
+ *       in: header
  *       name: sde-token  
  */
 songsRouter.post("/download", check, async (req, res) => {
@@ -159,7 +159,7 @@ songsRouter.post("/download", check, async (req, res) => {
  *       summary: Retrieve a list of similar songs
  *       description: Retrieve a list of similar songs given a song title
  *       security:
- *        - cookieAuth: []
+ *        - tokenAuth: []
  *       parameters:
  *         - in: path
  *           name: id
@@ -207,9 +207,9 @@ songsRouter.post("/download", check, async (req, res) => {
  * 
  * components:
  *   securitySchemes:
- *     cookieAuth:
+ *     tokenAuth:
  *       type: apiKey
- *       in: cookie
+ *       in: header
  *       name: sde-token  
  */
 songsRouter.get("/suggestion/:id", check, async (req, res) => {
