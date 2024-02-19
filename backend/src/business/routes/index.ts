@@ -13,7 +13,7 @@ const router = Router();
  *       summary: Retrieve a list of similar songs
  *       description: Retrieve a list of similar songs given a song title
  *       security:
- *        - cookieAuth: []
+ *        - tokenAuth: []
  *       requestBody:
  *         required: true
  *         content:
@@ -72,9 +72,9 @@ const router = Router();
  *
  * components:
  *   securitySchemes:
- *     cookieAuth:
+ *     tokenAuth:
  *       type: apiKey
- *       in: cookie
+ *       in: header
  *       name: sde-token  
  */ 
 router.post("/maroofy", check, maroofyController);
@@ -87,7 +87,7 @@ router.post("/maroofy", check, maroofyController);
  *       summary: Download a song from youtube
  *       description: Providing a youtube link, you are able to download and add the song to yout library
  *       security:
- *        - cookieAuth: []
+ *        - tokenAuth: []
  *       requestBody:
  *         required: true
  *         content:
@@ -144,9 +144,9 @@ router.post("/maroofy", check, maroofyController);
  *
  * components:
  *   securitySchemes:
- *     cookieAuth:
+ *     tokenAuth:
  *       type: apiKey
- *       in: cookie
+ *       in: header
  *       name: sde-token  
  */ 
 router.post("/yt-dl", check, ytDlController);
@@ -158,7 +158,7 @@ router.post("/yt-dl", check, ytDlController);
  *       summary: Split audio file
  *       description: Split an audio file into its component tracks
  *       security:
- *        - cookieAuth: []
+ *        - tokenAuth: []
  *       requestBody:
  *         required: true
  *         content:
@@ -219,9 +219,9 @@ router.post("/yt-dl", check, ytDlController);
  * 
  * components:
  *   securitySchemes:
- *     cookieAuth:
+ *     tokenAuth:
  *       type: apiKey
- *       in: cookie
+ *       in: header
  *       name: sde-token  
  */
 router.post("/spleeter", check, spleeterController);
