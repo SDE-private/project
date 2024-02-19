@@ -66,7 +66,11 @@ analyzeRouter.post("/split/:id", check, async (req, res) => {
       id: req.params.id,
       username: (req.user as User).username,
     }),
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      //@ts-ignore
+      "authorization": req.token
+    },
   })
     .then((response) => response.json())
     .then((data) => res.json(data))

@@ -5,9 +5,9 @@ import { User, UserInfo } from "../../business/adapters/db_controller.js";
 const check = (req: Request, res: Response, next: NextFunction) => {
   console.log(req.originalUrl);
   const token = req.headers["authorization"] as string;
-  //@ts-ignore
-  req.token = token;
   if (token) {
+    //@ts-ignore
+    req.token = token;
     jwt.verify(token, "sde", async (err: any, user: any) => {
       if (err) {
         console.log(err);
