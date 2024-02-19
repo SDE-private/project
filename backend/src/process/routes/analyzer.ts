@@ -22,7 +22,7 @@ const analyzeRouter = Router();
  *             description: ID of the audio file
  *             example: "HsLqNFIFxnk"
  *       security:
- *        - cookieAuth: []
+ *        - tokenAuth: []
  *       responses:
  *          '200':
  *            description: Successfully split audio file
@@ -54,9 +54,9 @@ const analyzeRouter = Router();
  * 
  * components:
  *   securitySchemes:
- *     cookieAuth:
+ *     tokenAuth:
  *       type: apiKey
- *       in: cookie
+ *       in: header
  *       name: sde-token  
  */ 
 analyzeRouter.post("/split/:id", check, async (req, res) => {
