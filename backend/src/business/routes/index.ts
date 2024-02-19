@@ -74,8 +74,8 @@ const router = Router();
  *   securitySchemes:
  *     tokenAuth:
  *       type: apiKey
- *       in: header
- *       name: sde-token  
+ *       in: headers
+ *       name: authorization
  */ 
 router.post("/maroofy", check, maroofyController);
 
@@ -146,8 +146,8 @@ router.post("/maroofy", check, maroofyController);
  *   securitySchemes:
  *     tokenAuth:
  *       type: apiKey
- *       in: header
- *       name: sde-token  
+ *       in: headers
+ *       name: authorization
  */ 
 router.post("/yt-dl", check, ytDlController);
 
@@ -221,8 +221,8 @@ router.post("/yt-dl", check, ytDlController);
  *   securitySchemes:
  *     tokenAuth:
  *       type: apiKey
- *       in: header
- *       name: sde-token  
+ *       in: headers
+ *       name: authorization
  */
 router.post("/spleeter", check, spleeterController);
 

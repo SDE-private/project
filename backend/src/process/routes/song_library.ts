@@ -49,8 +49,8 @@ const songsRouter = Router();
  *   securitySchemes:
  *     tokenAuth:
  *       type: apiKey
- *       in: header
- *       name: sde-token  
+ *       in: headers
+ *       name: authorization  
  */
 songsRouter.get("/songs", check, (req, res) => {
   const songs = (req.user as User).songs;
@@ -87,22 +87,22 @@ songsRouter.get("/songs", check, (req, res) => {
  *           application/json:
  *             schema:
  *               type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                     example: "HsLqNFIFxnk"
- *                   title:
- *                     type: string
- *                     example: "PoP_X 'Io Centro Con I Missili'"
- *                   upload_timestamp:
- *                     type: integer
- *                     example: 1708093435972
- *                   yt_url:
- *                     type: string
- *                     example: "https://www.youtube.com/watch?v=HsLqNFIFxnk"
- *                   analyzed:
- *                     type: boolean
- *                     example: false
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: "HsLqNFIFxnk"
+ *                 title:
+ *                   type: string
+ *                   example: "PoP_X 'Io Centro Con I Missili'"
+ *                 upload_timestamp:
+ *                   type: integer
+ *                   example: 1708093435972
+ *                 yt_url:
+ *                   type: string
+ *                   example: "https://www.youtube.com/watch?v=HsLqNFIFxnk"
+ *                 analyzed:
+ *                   type: boolean
+ *                   example: false
  *       '500':
  *         description: Si è verificato un errore durante la richiesta
  *         content:
@@ -119,8 +119,8 @@ songsRouter.get("/songs", check, (req, res) => {
  *   securitySchemes:
  *     tokenAuth:
  *       type: apiKey
- *       in: header
- *       name: sde-token  
+ *       in: headers
+ *       name: authorization
  */
 songsRouter.post("/download", check, async (req, res) => {
   const uname = (req.user as User).username;
@@ -209,8 +209,8 @@ songsRouter.post("/download", check, async (req, res) => {
  *   securitySchemes:
  *     tokenAuth:
  *       type: apiKey
- *       in: header
- *       name: sde-token  
+ *       in: headers
+ *       name: authorization
  */
 songsRouter.get("/suggestion/:id", check, async (req, res) => {
   try {

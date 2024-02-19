@@ -56,8 +56,8 @@ const analyzeRouter = Router();
  *   securitySchemes:
  *     tokenAuth:
  *       type: apiKey
- *       in: header
- *       name: sde-token  
+ *       in: headers
+ *       name: authorization 
  */ 
 analyzeRouter.post("/split/:id", check, async (req, res) => {
   const result = await fetch(`http://localhost:3000/spleeter`, {

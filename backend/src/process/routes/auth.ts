@@ -3,6 +3,7 @@ import check from "../middleware/check.js";
 
 const authRouter = Router();
 
+//TODO: Questo endpoint server per davvero??
 authRouter.get("/login", check, (req, res) => {
   res.redirect("/app");
 });
