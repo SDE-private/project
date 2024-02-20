@@ -30,12 +30,13 @@ const maroofyController = async (
     // fetch library
     const libraryResponse = await fetch(libraryApi).then((res) => res.json());
 
-    // return first result
-    // TODO
-    const track_id = libraryResponse.results[0].trackId;
-    if (!track_id) {
-      return res.status(404).json({ error: "song not found" });
+    console.log(libraryResponse);
+
+    if (libraryResponse.resultCount === 0) {
+      return res.status(200).json([]);
     }
+
+    const track_id = libraryResponse.results[0].trackId;
 
     // return result
     const request = JSON.stringify({
@@ -45,7 +46,7 @@ const maroofyController = async (
     const similarResponse = await fetch(similarApi).then((res) => res.json());
 
     if (!similarResponse) {
-      return res.status(400).json({ error: "similar songs not found" });
+      return res.status(200).json([]);
     }
 
     const similarData = similarResponse[0].result.data.json;

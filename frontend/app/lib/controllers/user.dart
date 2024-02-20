@@ -60,14 +60,12 @@ class UserController {
     String url = "$library_base_url/suggestion/$song_id";
     Uri uri = Uri.parse(url);
     final response = await http.get(uri, headers: headers);
-    if (response.statusCode == 200) {
-      final json_body = jsonDecode(response.body) as List<dynamic>;
-      List<SimilarSong> ret = json_body.map((e) => SimilarSong.fromJSON(e as Map<String, dynamic>)).toList();
-      return ret;
-    }
-    else {
-      return [];
-    }
+    print(response.statusCode);
+    print(response.body);
+    final json_body = jsonDecode(response.body) as List<dynamic>;
+    List<SimilarSong> ret = json_body.map((e) => SimilarSong.fromJSON(e as Map<String, dynamic>)).toList();
+    return ret;
+
   }
 
 }

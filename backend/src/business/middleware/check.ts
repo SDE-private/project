@@ -11,7 +11,6 @@ const check = (req: Request, res: Response, next: NextFunction) => {
     jwt.verify(token, "sde", async (err: any, user: any) => {
       if (err) {
         console.log(err);
-        // TODO: should just return an error
         res.status(403).json({ error: "Not a valid token" });
         return;
       }
@@ -33,7 +32,6 @@ const check = (req: Request, res: Response, next: NextFunction) => {
       next();
     });
   } else {
-    // TODO: should just return an error
     res.status(403).json({ error: "No token provided" });
     return;
   }

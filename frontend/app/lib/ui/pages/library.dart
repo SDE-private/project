@@ -21,8 +21,7 @@ class _LibraryPageState extends State<LibraryPage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text("Library",
-              style: TextStyle(fontWeight: FontWeight.bold)),
+          title: const Text("Library"),
           actions: [
             IconButton(
                 icon: const Icon(Icons.logout),
@@ -134,11 +133,17 @@ class _LibraryPageState extends State<LibraryPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        insetPadding: const EdgeInsets.all(10),
         title: const Text("Similar song"),
-        content: ListView(
-          children: similar_song.map((e) => ListTile(
-            title: Text("${e.artist_name} - ${e.song_name}"),
-          )).toList(),
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.5,
+          child: similar_song.isEmpty
+              ? const Text("No similar song found")
+              : ListView(
+            children: similar_song.map((e) => ListTile(
+              title: Text("${e.artist_name} - ${e.song_name}"),
+            )).toList(),
+          ),
         ),
         actions: [
           MaterialButton(
