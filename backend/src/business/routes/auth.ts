@@ -54,11 +54,8 @@ middleware.get("/google/callback", requireGoogleAuth, async (req: any, res) => {
 });
 
 middleware.get("/logout", (req, res) => {
-  req.logout(() => {
-    res.clearCookie("sde-token");
-    // clear the session
-    req.session.destroy(() => { });
-  });
+  res.clearCookie("sde-token");
+  req.session.destroy(() => { res.redirect("http://localhost/app/"); });
 });
 
 export default middleware;
