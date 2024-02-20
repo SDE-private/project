@@ -137,7 +137,7 @@ class _LibraryPageState extends State<LibraryPage> {
         title: const Text("Similar song"),
         content: ListView(
           children: similar_song.map((e) => ListTile(
-            title: Text("${e.artist} - ${e.song_name}"),
+            title: Text("${e.artist_name} - ${e.song_name}"),
           )).toList(),
         ),
         actions: [
