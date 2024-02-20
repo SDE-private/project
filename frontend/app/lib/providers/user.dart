@@ -13,11 +13,13 @@ class UserProvider with ChangeNotifier {
 
   void login() {
     // get content of cookie called sde-token
-    print(document.cookie);
     List<String> tokens = document.cookie!.split(';');
-    String? test =
-        tokens.firstWhere((element) => element.contains('sde-token'));
-    print(test);
+    // check if sde-token exists
+    tokens.forEach((element) {
+      if (element.contains('sde-token')) {
+        token = element;
+      }
+    });
     if (token == null) {
       window.location.replace("http://localhost:3001/auth/login");
     }
