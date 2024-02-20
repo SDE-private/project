@@ -13,7 +13,7 @@ def generate_random_string():
 
 def spawn_spleeter(input_path: str):
   process = subprocess.Popen(
-    ['spleeter', 'separate', '-p', 'spleeter:2stems', '-o', OUTPUT_DIR, '-c', 'mp3', input_path],
+    ['spleeter', 'separate', '-p', 'spleeter:5stems', '-o', OUTPUT_DIR, '-c', 'mp3', input_path],
     stdout=subprocess.PIPE, 
     stderr=subprocess.PIPE
   )
