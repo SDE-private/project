@@ -65,16 +65,10 @@ class _SongPageState extends State<SongPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      key: const Key('play_button'),
-                      onPressed: multiplayer.is_pause ? multiplayer.play_music : null,
-                      iconSize: 48.0,
-                      icon: const Icon(Icons.play_arrow),
-                    ),
-                    IconButton(
-                      key: const Key('pause_button'),
-                      onPressed: multiplayer.is_pause ? null : multiplayer.pause_music,
-                      iconSize: 48.0,
-                      icon: const Icon(Icons.pause),
+                    key: multiplayer.is_pause ? const Key('play_button') : const Key('pause_button'),
+                    onPressed: multiplayer.is_pause ? multiplayer.play_music : multiplayer.pause_music,
+                    iconSize: 48.0,
+                    icon: multiplayer.is_pause ? const Icon(Icons.play_arrow) : const Icon(Icons.pause),
                     ),
                   ],
                 )

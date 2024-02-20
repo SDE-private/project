@@ -47,6 +47,7 @@ class UserController {
     Uri uri = Uri.parse(url);
     final response = await http.post(uri, headers: headers);
     print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       return true;
     }
