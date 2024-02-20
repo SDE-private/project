@@ -43,7 +43,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _do_login() {
-    // context.go(Uri(path: "/auth", queryParameters: {"token": "ciao"}).toString());
     html.window.location.replace("http://localhost:3001/auth/login");
   }
 }

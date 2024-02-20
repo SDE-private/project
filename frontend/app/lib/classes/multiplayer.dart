@@ -11,14 +11,13 @@ class Multiplayer with ChangeNotifier {
   
   Multiplayer(String song_id) {
     instruments = [
-      // Instrument("bass", FontAwesomeIcons.bars, "bass.wav"),
+      Instrument("bass", FontAwesomeIcons.bars, "http://localhost/static/$song_id/bass.mp3"),
       Instrument("vocals", FontAwesomeIcons.microphone, "http://localhost/static/$song_id/vocals.mp3"),
-      // Instrument("drums", FontAwesomeIcons.drum, "drums.wav"),
-      Instrument("accompaniment", FontAwesomeIcons.ellipsis, "http://localhost/static/$song_id/accompaniment.mp3"),
-      // Instrument("piano", FontAwesomeIcons.music, "piano.wav"),
+      Instrument("drums", FontAwesomeIcons.drum, "http://localhost/static/$song_id/drums.mp3"),
+      Instrument("other", FontAwesomeIcons.ellipsis, "http://localhost/static/$song_id/other.mp3"),
+      Instrument("piano", FontAwesomeIcons.music, "http://localhost/static/$song_id/piano.mp3"),
     ];
 
-    instruments[0].player.setSource(UrlSource(instruments[0].pathfile));
     for (final ins in instruments) {
       if (ins.enabled) {
         ins.player.setSource(UrlSource(ins.pathfile));
@@ -51,7 +50,6 @@ class Multiplayer with ChangeNotifier {
     else {
       for (final ins in instruments) {
         if (ins.enabled) {
-          // await ins.player.seek(Duration(seconds: 30));
           ins.player.resume();
         }
       }

@@ -12,6 +12,7 @@ class LibraryPage extends StatefulWidget {
 }
 
 class _LibraryPageState extends State<LibraryPage> {
+  late List<Song> songs;
   @override
   Widget build(BuildContext context) {
     if (!context.read<UserProvider>().is_logged()) {
@@ -30,7 +31,7 @@ class _LibraryPageState extends State<LibraryPage> {
           ],
         ),
         floatingActionButton: FloatingActionButton.large(
-            onPressed: _open_add_popup, child: const Icon(Icons.add)),
+            onPressed: () => _open_add_popup(songs), child: const Icon(Icons.add)),
         body: Center(
             child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.5,
@@ -38,7 +39,7 @@ class _LibraryPageState extends State<LibraryPage> {
               future: context.read<UserProvider>().ctrl!.get_songs(),
               builder: (BuildContext ctx, AsyncSnapshot<List<Song>> snapshot) {
                 if (snapshot.hasData) {
-                  final songs = snapshot.data!;
+                  songs = snapshot.data!;
                   return ListView.builder(
                       itemCount: songs.length,
                       itemBuilder: (ctx, index) {
@@ -54,11 +55,11 @@ class _LibraryPageState extends State<LibraryPage> {
                                         icon: const Icon(Icons.audiotrack))
                                     : IconButton(
                                         onPressed: () =>
-                                            _analyze_song(songs, index),
+                                            _analyze_song(songs[index]),
                                         icon: const Icon(
                                             Icons.call_split_outlined)),
                                 IconButton(
-                                  onPressed: () => null,
+                                  onPressed: () => _search_similar(songs[index]),
                                   icon: const Icon(Icons.manage_search),
                                 )
                               ])
@@ -74,36 +75,45 @@ class _LibraryPageState extends State<LibraryPage> {
         )));
   }
 
-  void _open_add_popup() {
+  void _open_add_popup(List<Song> songs) {
+    final txt_ctrl = TextEditingController();
     showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-              title: const Text("Paste YouTube Link"),
-              content: TextField(
-                onChanged: (val) {
-                  print(val);
-                },
-                controller: TextEditingController(),
-              ),
-              actions: [
-                MaterialButton(
-                    child: const Text("Download"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    })
-              ],
-            ));
+      context: context,
+      builder: (ctx) => AlertDialog(
+            title: const Text("Paste YouTube Link"),
+            content: TextField(
+              onChanged: (val) {
+                print(val);
+              },
+              controller: txt_ctrl,
+            ),
+            actions: [
+              MaterialButton(
+                  child: const Text("Download"),
+                  onPressed: () async {
+                    final song = await context.read<UserProvider>().ctrl!.download_song(txt_ctrl.value.text);
+                    if (song == null) {
+                      print("error");
+                    }
+                    else {
+                      setState(() {
+                        songs.add(song);
+                      });
+                    }
+                    Navigator.pop(context);
+                  })
+            ],
+        ));
   }
 
   // pass the songs and the index
-  void _analyze_song(List<Song> songs, int index) async {
-    final song = songs[index];
+  void _analyze_song(Song song) async {
     print(song.yt_url);
     final res = await context.read<UserProvider>().ctrl!.split_song(song.id);
     if (res == true) {
       print('analyzed');
       setState(() {
-        songs[index].analyzed = true;
+        song.analyzed = true;
       });
     } else {
       print('not analyzed');
@@ -112,11 +122,31 @@ class _LibraryPageState extends State<LibraryPage> {
 
   void _open_song_page(Song song) {
     context.go('/song', extra: song);
-    // context.read<UserProvider>().ctrl!.download_song("https://www.youtube.com/watch?v=kJQP7kiw5Fk");
   }
 
   void _do_logout() {
     context.read<UserProvider>().logout();
     context.go('/login');
+  }
+
+  void _search_similar(Song song) async {
+    final similar_song = await context.read<UserProvider>().ctrl!.get_suggestion(song.id);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("Similar song"),
+        content: ListView(
+          children: similar_song.map((e) => ListTile(
+            title: Text("${e.artist} - ${e.song_name}"),
+          )).toList(),
+        ),
+        actions: [
+          MaterialButton(
+            child: const Text("Close"),
+            onPressed: () {
+              Navigator.pop(context);
+          })
+        ],
+      ));
   }
 }
