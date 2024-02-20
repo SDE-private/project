@@ -29,7 +29,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 onPressed: _do_logout),
           ],
         ),
-        floatingActionButton: FloatingActionButton.small(
+        floatingActionButton: FloatingActionButton.large(
             onPressed: _open_add_popup, child: const Icon(Icons.add)),
         body: Center(
             child: SizedBox(

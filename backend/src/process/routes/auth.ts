@@ -25,10 +25,11 @@ authRouter.get("/login", requireGoogleAuth);
  *       description: Logs the user out
  *
  */
-authRouter.get("/logout", (req, res) => {
-  res.redirect(
-    "http://localhost:3000/auth/logout?redirect=http://localhost:3001/",
-  );
+authRouter.get("/logout", async (req, res) => {
+  await fetch("http://localhost:3000/auth/logout", {
+    method: "GET",
+  });
+  return res.status(200).json({ message: "Logged out" });
 });
 
 export default authRouter;
