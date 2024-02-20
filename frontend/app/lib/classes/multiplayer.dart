@@ -69,4 +69,16 @@ class Multiplayer with ChangeNotifier {
     is_pause = true;
     notifyListeners();
   }
+
+  void seek_music(double value) {
+    final new_position = value * duration.inMilliseconds;
+    for (final ins in instruments) {
+      if (ins.enabled) {
+        ins.player.seek(Duration(milliseconds: new_position.toInt()));
+      }
+    }
+    current_position = Duration(milliseconds: new_position.toInt());
+    notifyListeners();
+  }
+
 }

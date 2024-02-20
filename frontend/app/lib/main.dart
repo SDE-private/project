@@ -38,9 +38,7 @@ class MyApp extends StatelessWidget {
     GoRoute(
         path: '/auth',
         builder: (ctx, state) {
-          String? token = state.uri.queryParameters['token'];
-          print(token);
-          return AuthPage(token: token);
+          return AuthPage();
         }),
     GoRoute(
         path: '/song',

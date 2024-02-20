@@ -43,8 +43,11 @@ middleware.get("/google/callback", requireGoogleAuth, async (req: any, res) => {
       });
     }
     req.user = await user.json();
-    if (!req.user.error) res.redirect(`http://localhost/app/#/auth?token=${token}`);
-    else res.redirect("/auth/failed");
+    if (!req.user.error) {
+      res.cookie("sde-token", token);
+      res.redirect(`http://localhost/app/#/auth?token=${token}`);
+    }
+    else res.redirect("http://localhost/app/#/fail");
   } catch (error) {
     console.log(error);
   }

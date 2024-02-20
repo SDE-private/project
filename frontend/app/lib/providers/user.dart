@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/user.dart';
 
@@ -9,8 +11,20 @@ class UserProvider with ChangeNotifier {
     return token == null ? false : true;
   }
 
-  void login(String auth_token) {
-    token = auth_token;
+  void login() {
+    //check cookie existance
+    try {
+      if (document.cookie!.isEmpty) {
+        return;
+      }
+    } catch (e) {
+      return;
+    }
+    // get content of cookie called sde-token
+    List<String> tokens = document.cookie!.split(';');
+    token = tokens.firstWhere((element) => element.contains('sde-token'));
+    token = token!.split('=')[1];
+    print(token);
     ctrl = UserController(get_headers()!);
   }
 
@@ -21,12 +35,8 @@ class UserProvider with ChangeNotifier {
   Map<String, String>? get_headers() {
     if (token == null) {
       return null;
-    }
-    else {
-      return {
-        "authorization": token!,
-        "Content-Type": "application/json"
-      };
+    } else {
+      return {"authorization": token!, "Content-Type": "application/json"};
     }
   }
 }

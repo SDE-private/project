@@ -15,12 +15,13 @@ class _LibraryPageState extends State<LibraryPage> {
   @override
   Widget build(BuildContext context) {
     if (!context.read<UserProvider>().is_logged()) {
-      context.go('/login');
+      context.read<UserProvider>().login();
     }
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: const Text("Library"),
+          title: const Text("Library",
+              style: TextStyle(fontWeight: FontWeight.bold)),
           actions: [
             IconButton(
                 icon: const Icon(Icons.logout),
@@ -28,7 +29,7 @@ class _LibraryPageState extends State<LibraryPage> {
                 onPressed: _do_logout),
           ],
         ),
-        floatingActionButton: FloatingActionButton.large(
+        floatingActionButton: FloatingActionButton.small(
             onPressed: _open_add_popup, child: const Icon(Icons.add)),
         body: Center(
             child: SizedBox(
@@ -45,16 +46,22 @@ class _LibraryPageState extends State<LibraryPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(songs[index].title),
-                              songs[index].analyzed
-                                  ? IconButton(
-                                      onPressed: () =>
-                                          _open_song_page(songs[index]),
-                                      icon: const Icon(Icons.audiotrack))
-                                  : IconButton(
-                                      onPressed: () =>
-                                          _analyze_song(songs, index),
-                                      icon:
-                                          const Icon(Icons.call_split_outlined))
+                              ButtonBar(children: [
+                                songs[index].analyzed
+                                    ? IconButton(
+                                        onPressed: () =>
+                                            _open_song_page(songs[index]),
+                                        icon: const Icon(Icons.audiotrack))
+                                    : IconButton(
+                                        onPressed: () =>
+                                            _analyze_song(songs, index),
+                                        icon: const Icon(
+                                            Icons.call_split_outlined)),
+                                IconButton(
+                                  onPressed: () => null,
+                                  icon: const Icon(Icons.manage_search),
+                                )
+                              ])
                             ]);
                       });
                 } else if (snapshot.hasError) {
@@ -71,7 +78,7 @@ class _LibraryPageState extends State<LibraryPage> {
     showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
-              title: const Text("Add song"),
+              title: const Text("Paste YouTube Link"),
               content: TextField(
                 onChanged: (val) {
                   print(val);

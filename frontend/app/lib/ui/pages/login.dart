@@ -15,6 +15,26 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      const Text(
+        "Welcome to the app!",
+        style: TextStyle(
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            decoration: TextDecoration.none),
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(height: 20),
+      const Text(
+        "Please login to continue",
+        style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.normal,
+            color: Colors.black,
+            decoration: TextDecoration.none),
+        textAlign: TextAlign.center,
+      ),
+      const SizedBox(height: 20),
       SignInButton(
         Buttons.google,
         onPressed: _do_login,

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:frontend/classes/instruments.dart';
 import 'package:frontend/classes/multiplayer.dart';
 import 'package:frontend/classes/song.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../../providers/user.dart';
 
 class SongPage extends StatefulWidget {
   Song song;
@@ -29,7 +33,21 @@ class _SongPageState extends State<SongPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    if (!context.read<UserProvider>().is_logged()) {
+      context.go('/login');
+    }
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: const Text("Song"),
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.logout),
+                tooltip: 'Logout',
+                onPressed: _do_logout),
+          ],
+        ),
+      body: Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -57,7 +75,12 @@ class _SongPageState extends State<SongPage> {
         ListenableBuilder(
           listenable: multiplayer,
           builder: (BuildContext context, Widget? child) {
-            print(multiplayer.current_position);
+            // check if the song is at the end
+            if (multiplayer.current_position.inMilliseconds >= multiplayer.duration.inMilliseconds) {
+              print("Song ended");
+              multiplayer.pause_music();
+              multiplayer.current_position = Duration.zero;
+            }
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -77,6 +100,12 @@ class _SongPageState extends State<SongPage> {
           }
         )
       ]
+    )
     );
+  }
+
+  void _do_logout() {
+    context.read<UserProvider>().logout();
+    context.go('/login');
   }
 }
