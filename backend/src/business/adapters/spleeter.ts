@@ -27,8 +27,11 @@ const spleeterController = async (req, res) => {
     } else {
       return res.status(200).json({
         stems: {
-          vocals: `/media/${song_id}/vocals.wav`,
-          accompaniment: `/media/${song_id}/accompaniment.wav`,
+          vocals: `/media/${song_id}/vocals.mp3`,
+          accompaniment: `/media/${song_id}/accompaniment.mp3`,
+          bass: `/media/${song_id}/bass.mp3`,
+          drums: `/media/${song_id}/drums.mp3`,
+          other: `/media/${song_id}/other.mp3`,
         },
       });
     }

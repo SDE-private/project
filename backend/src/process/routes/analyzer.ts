@@ -36,10 +36,19 @@ const analyzeRouter = Router();
  *                      properties:
  *                         accompaniment:
  *                            type: string
- *                            example: "/media/HsLqNFIFxnk/accompaniment.wav"
+ *                            example: "/media/HsLqNFIFxnk/accompaniment.mp3"
  *                         vocals:
  *                            type: string
- *                            example: "/media/HsLqNFIFxnk/vocals.wav"
+ *                            example: "/media/HsLqNFIFxnk/vocals.mp3"
+ *                         bass:
+ *                           type: string
+ *                           example: "/media/HsLqNFIFxnk/bass.mp3"
+ *                         drums:
+ *                            type: string
+ *                            example: "/media/HsLqNFIFxnk/drums.mp3"
+ *                         other:
+ *                            type: string
+ *                            example: "/media/HsLqNFIFxnk/other.mp3"
  *
  *          '500':
  *            description: Server encountered a problem
